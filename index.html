@@ -110,15 +110,37 @@
       border-radius: 2px;
     }
 
-    /* ===== 查询模块 ===== */
-    .query-card {
+    /* ===== 左右布局容器 ===== */
+    .customer-layout {
+      display: flex;
+      gap: 16px;
       margin-bottom: 16px;
+      align-items: stretch;
     }
 
+    .left-col {
+      flex: 0 0 56%;
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .right-col {
+      flex: 0 0 calc(44% - 16px);
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .right-col .radar-container {
+      flex: 1;
+    }
+
+    /* ===== 查询区 ===== */
     .query-inline {
       display: flex;
       align-items: center;
-      justify-content: center;
       gap: 12px;
     }
 
@@ -130,40 +152,15 @@
     }
 
     .query-input {
-      width: 360px;
+      width: 260px;
     }
 
     .query-btn {
-      min-width: 100px;
+      min-width: 80px;
       height: 32px;
     }
 
-    .reset-btn {
-      min-width: 100px;
-      height: 32px;
-    }
-
-    /* ===== 客户信息区 - 左右布局 ===== */
-    .customer-section {
-      display: flex;
-      gap: 16px;
-      margin-bottom: 16px;
-      align-items: stretch;
-    }
-
-    .customer-left {
-      flex: 0 0 56%;
-      min-width: 0;
-    }
-
-    .customer-right {
-      flex: 0 0 calc(44% - 16px);
-      min-width: 0;
-      display: flex;
-      flex-direction: column;
-    }
-
-    .customer-right .radar-container {
+    .tag-card {
       flex: 1;
     }
 
@@ -399,11 +396,11 @@
 
     /* 响应式 */
     @media (max-width: 1400px) {
-      .customer-section {
+      .customer-layout {
         flex-direction: column;
       }
-      .customer-left,
-      .customer-right {
+      .left-col,
+      .right-col {
         flex: 1 1 auto;
       }
       .script-desc-section {
@@ -462,66 +459,66 @@
 
 <div id="app">
   <div class="app-container">
-    <!-- ===== 一、手机号码查询模块 ===== -->
-    <div class="card query-card">
-      <div class="query-inline">
-        <span class="query-label">📱 手机号码：</span>
-        <el-input
-          v-model="phoneNumber"
-          placeholder="请输入手机号码"
-          maxlength="11"
-          show-word-limit
-          clearable
-          class="query-input"
-          @keyup.enter="handleQuery"
-        >
-          <template #prefix>
-            <span style="color:#909399;">📞</span>
-          </template>
-        </el-input>
-        <el-button type="primary" class="query-btn" @click="handleQuery" :loading="queryLoading">
-          查 询
-        </el-button>
-        <el-button plain type="info" class="reset-btn" @click="handleReset">
-          重 置
-        </el-button>
-      </div>
-    </div>
+    <!-- ===== 一、手机号码 + 客户标签（左） | 客户画像分析（右） ===== -->
+    <div class="customer-layout">
+      <!-- 左侧列 -->
+      <div class="left-col">
+        <!-- 手机号码查询 -->
+        <div class="card query-card">
+          <div class="query-inline">
+            <span class="query-label">📱 手机号码：</span>
+            <el-input
+              v-model="phoneNumber"
+              placeholder="请输入手机号码"
+              maxlength="11"
+              show-word-limit
+              clearable
+              class="query-input"
+              @keyup.enter="handleQuery"
+            >
+              <template #prefix>
+                <span style="color:#909399;">📞</span>
+              </template>
+            </el-input>
+            <el-button type="primary" class="query-btn" @click="handleQuery" :loading="queryLoading">
+              查 询
+            </el-button>
+          </div>
+        </div>
 
-    <!-- ===== 二、客户标签 + 客户画像分析 ===== -->
-    <div v-show="showResult" class="customer-section">
-      <!-- 左侧：客户标签 -->
-      <div class="card customer-left">
-        <div class="card-title">👤 客户标签</div>
-        <div class="tag-grid">
-          <div class="tag-item"><span class="tag-label">号码：</span><span class="tag-value">{{ customerInfo.phone }}</span></div>
-          <div class="tag-item"><span class="tag-label">全球通等级：</span><span class="tag-value" style="color:#e6a23c;font-weight:700;">{{ customerInfo.globalLevel }}</span></div>
-          <div class="tag-item"><span class="tag-label">入网时间：</span><span class="tag-value">{{ customerInfo.joinDate }}</span></div>
-          <div class="tag-item"><span class="tag-label">网龄：</span><span class="tag-value">{{ customerInfo.netAge }}</span></div>
-          <div class="tag-item"><span class="tag-label">套餐名称：</span><span class="tag-value">{{ customerInfo.packageName }}</span></div>
-          <div class="tag-item"><span class="tag-label">套餐费：</span><span class="tag-value">{{ customerInfo.packageFee }}元</span></div>
-          <div class="tag-item"><span class="tag-label">套内语音：</span><span class="tag-value">{{ customerInfo.voiceInPackage }}</span></div>
-          <div class="tag-item"><span class="tag-label">套内流量：</span><span class="tag-value">{{ customerInfo.dataInPackage }}</span></div>
-          <div class="tag-item"><span class="tag-label">套内语音使用：</span><span class="tag-value">{{ customerInfo.voiceUsed }}</span></div>
-          <div class="tag-item"><span class="tag-label">套内流量使用：</span><span class="tag-value">{{ customerInfo.dataUsed }}</span></div>
-          <div class="tag-item"><span class="tag-label">是否合户：</span><span class="tag-value">{{ customerInfo.isJointAccount }}</span></div>
-          <div class="tag-item"><span class="tag-label">宽带带宽：</span><span class="tag-value">{{ customerInfo.broadbandSpeed }}</span></div>
-          <div class="tag-item"><span class="tag-label">是否魔百盒：</span><span class="tag-value">{{ customerInfo.hasMoBaiHe }}</span></div>
-          <div class="tag-item"><span class="tag-label">是否组网：</span><span class="tag-value">{{ customerInfo.hasNetworking }}</span></div>
-          <div class="tag-item"><span class="tag-label">通信消费：</span><span class="tag-value">{{ customerInfo.communicationFee }}元</span></div>
-          <div class="tag-item"><span class="tag-label">月均账单消费：</span><span class="tag-value">{{ customerInfo.avgMonthlyBill }}元</span></div>
-          <div class="tag-item"><span class="tag-label">月均流量使用：</span><span class="tag-value">{{ customerInfo.avgDataUsage }}</span></div>
-          <div class="tag-item"><span class="tag-label">月均语音使用：</span><span class="tag-value">{{ customerInfo.avgVoiceUsage }}</span></div>
-          <div class="tag-item"><span class="tag-label">月均流量饱和度：</span><span class="tag-value">{{ customerInfo.dataSaturation }}</span></div>
-          <div class="tag-item"><span class="tag-label">是否集团V网：</span><span class="tag-value">{{ customerInfo.isGroupVNet }}</span></div>
-          <div class="tag-item"><span class="tag-label">是否家庭V网：</span><span class="tag-value">{{ customerInfo.isFamilyVNet }}</span></div>
-          <div class="tag-item"><span class="tag-label">月均流量费使用：</span><span class="tag-value">{{ customerInfo.avgDataFee }}元</span></div>
-          <div class="tag-item"><span class="tag-label">月均套包费使用：</span><span class="tag-value">{{ customerInfo.avgPackageFee }}元</span></div>
+        <!-- 客户标签 -->
+        <div v-show="showResult" class="card tag-card">
+          <div class="card-title">👤 客户标签</div>
+          <div class="tag-grid">
+            <div class="tag-item"><span class="tag-label">号码：</span><span class="tag-value">{{ customerInfo.phone }}</span></div>
+            <div class="tag-item"><span class="tag-label">全球通等级：</span><span class="tag-value" style="color:#e6a23c;font-weight:700;">{{ customerInfo.globalLevel }}</span></div>
+            <div class="tag-item"><span class="tag-label">入网时间：</span><span class="tag-value">{{ customerInfo.joinDate }}</span></div>
+            <div class="tag-item"><span class="tag-label">网龄：</span><span class="tag-value">{{ customerInfo.netAge }}</span></div>
+            <div class="tag-item"><span class="tag-label">套餐名称：</span><span class="tag-value">{{ customerInfo.packageName }}</span></div>
+            <div class="tag-item"><span class="tag-label">套餐费：</span><span class="tag-value">{{ customerInfo.packageFee }}元</span></div>
+            <div class="tag-item"><span class="tag-label">套内语音：</span><span class="tag-value">{{ customerInfo.voiceInPackage }}</span></div>
+            <div class="tag-item"><span class="tag-label">套内流量：</span><span class="tag-value">{{ customerInfo.dataInPackage }}</span></div>
+            <div class="tag-item"><span class="tag-label">套内语音使用：</span><span class="tag-value">{{ customerInfo.voiceUsed }}</span></div>
+            <div class="tag-item"><span class="tag-label">套内流量使用：</span><span class="tag-value">{{ customerInfo.dataUsed }}</span></div>
+            <div class="tag-item"><span class="tag-label">是否合户：</span><span class="tag-value">{{ customerInfo.isJointAccount }}</span></div>
+            <div class="tag-item"><span class="tag-label">宽带带宽：</span><span class="tag-value">{{ customerInfo.broadbandSpeed }}</span></div>
+            <div class="tag-item"><span class="tag-label">是否魔百盒：</span><span class="tag-value">{{ customerInfo.hasMoBaiHe }}</span></div>
+            <div class="tag-item"><span class="tag-label">是否组网：</span><span class="tag-value">{{ customerInfo.hasNetworking }}</span></div>
+            <div class="tag-item"><span class="tag-label">通信消费：</span><span class="tag-value">{{ customerInfo.communicationFee }}元</span></div>
+            <div class="tag-item"><span class="tag-label">月均账单消费：</span><span class="tag-value">{{ customerInfo.avgMonthlyBill }}元</span></div>
+            <div class="tag-item"><span class="tag-label">月均流量使用：</span><span class="tag-value">{{ customerInfo.avgDataUsage }}</span></div>
+            <div class="tag-item"><span class="tag-label">月均语音使用：</span><span class="tag-value">{{ customerInfo.avgVoiceUsage }}</span></div>
+            <div class="tag-item"><span class="tag-label">月均流量饱和度：</span><span class="tag-value">{{ customerInfo.dataSaturation }}</span></div>
+            <div class="tag-item"><span class="tag-label">是否集团V网：</span><span class="tag-value">{{ customerInfo.isGroupVNet }}</span></div>
+            <div class="tag-item"><span class="tag-label">是否家庭V网：</span><span class="tag-value">{{ customerInfo.isFamilyVNet }}</span></div>
+            <div class="tag-item"><span class="tag-label">月均流量费使用：</span><span class="tag-value">{{ customerInfo.avgDataFee }}元</span></div>
+            <div class="tag-item"><span class="tag-label">月均套包费使用：</span><span class="tag-value">{{ customerInfo.avgPackageFee }}元</span></div>
+          </div>
         </div>
       </div>
 
       <!-- 右侧：客户画像分析 -->
-      <div class="card customer-right">
+      <div v-show="showResult" class="card right-col">
         <div class="card-title">📡 客户画像分析</div>
         <div ref="radarChart" class="radar-container"></div>
         <div class="tag-summary">
