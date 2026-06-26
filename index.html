@@ -141,7 +141,12 @@
 
     .right-col .radar-container {
       flex: 1;
-      min-height: 300px;
+      min-height: 220px;
+    }
+
+    .right-col .tag-summary {
+      flex-shrink: 0;
+      margin-top: 8px;
     }
 
     /* ===== 查询区 ===== */
@@ -996,8 +1001,8 @@
           },
           legend: { show: false },
           radar: {
-            center: ['50%', '50%'],
-            radius: '75%',
+            center: ['50%', '52%'],
+            radius: '70%',
             indicator: radarData.indicators,
             axisName: {
               color: '#303133',
