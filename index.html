@@ -112,15 +112,13 @@
 
     /* ===== 左右布局容器 ===== */
     .customer-layout {
-      display: flex;
+      display: grid;
+      grid-template-columns: 56% 1fr;
       gap: 16px;
       margin-bottom: 16px;
-      align-items: stretch;
     }
 
     .left-col {
-      flex: 0 0 56%;
-      min-width: 0;
       display: flex;
       flex-direction: column;
       gap: 16px;
@@ -131,12 +129,9 @@
     }
 
     .right-col {
-      flex: 1;
-      min-width: 0;
       display: flex;
       flex-direction: column;
       margin-bottom: 0;
-      height: 100%;
     }
 
     .right-col .radar-container {
@@ -409,11 +404,7 @@
     /* 响应式 */
     @media (max-width: 1400px) {
       .customer-layout {
-        flex-direction: column;
-      }
-      .left-col,
-      .right-col {
-        flex: 1 1 auto;
+        grid-template-columns: 1fr;
       }
       .script-desc-section {
         flex-direction: column;
