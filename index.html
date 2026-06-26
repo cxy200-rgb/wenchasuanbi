@@ -1,0 +1,1129 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>闂煡绠楁瘮</title>
+  <!-- Element Plus CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/element-plus/dist/index.css">
+  <!-- ECharts -->
+  <script src="https://cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js"></script>
+  <!-- Vue 3 -->
+  <script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
+  <!-- Element Plus JS + Chinese locale -->
+  <script src="https://unpkg.com/element-plus/dist/index.full.min.js"></script>
+
+  <style>
+    /* ===== 鍏ㄥ眬鏍峰紡 ===== */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Microsoft YaHei', 'PingFang SC', 'Helvetica Neue', Arial, sans-serif;
+      background: linear-gradient(135deg, #e8f4fd 0%, #c8e4f8 30%, #dceefb 60%, #e3f0fb 100%);
+      min-height: 100vh;
+      color: #303133;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* 鏁翠綋瀹瑰櫒 */
+    .app-container {
+      max-width: 1600px;
+      margin: 0 auto;
+      padding: 20px 24px 100px;
+    }
+
+    /* ===== 椤堕儴鏍囬鏍?===== */
+    .header-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 28px;
+      background: linear-gradient(180deg, #1a6fb5 0%, #2080d0 100%);
+      border-radius: 12px;
+      margin-bottom: 20px;
+      box-shadow: 0 4px 16px rgba(26, 111, 181, 0.35);
+    }
+
+    .header-title {
+      font-size: 24px;
+      font-weight: 700;
+      color: #ffffff;
+      letter-spacing: 2px;
+    }
+
+    .header-title i {
+      margin-right: 8px;
+      font-size: 26px;
+    }
+
+    .header-info {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      color: rgba(255, 255, 255, 0.9);
+      font-size: 14px;
+    }
+
+    .header-info .divider {
+      width: 1px;
+      height: 18px;
+      background: rgba(255, 255, 255, 0.3);
+    }
+
+    /* ===== 閫氱敤鍗＄墖鏍峰紡 ===== */
+    .card {
+      background: #ffffff;
+      border-radius: 10px;
+      padding: 16px 20px;
+      margin-bottom: 16px;
+      box-shadow: 0 2px 12px rgba(64, 158, 255, 0.08), 0 1px 3px rgba(0, 0, 0, 0.04);
+      transition: box-shadow 0.3s ease;
+      border: 1px solid #eef5fc;
+    }
+
+    .card:hover {
+      box-shadow: 0 4px 20px rgba(64, 158, 255, 0.14), 0 2px 6px rgba(0, 0, 0, 0.06);
+    }
+
+    .card-title {
+      font-size: 17px;
+      font-weight: 700;
+      color: #1a6fb5;
+      margin-bottom: 16px;
+      padding-bottom: 10px;
+      border-bottom: 2px solid #e8f4fd;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .card-title::before {
+      content: '';
+      display: inline-block;
+      width: 4px;
+      height: 18px;
+      background: linear-gradient(180deg, #409EFF, #66b1ff);
+      border-radius: 2px;
+    }
+
+    /* ===== 鏌ヨ鍖?===== */
+    .query-section {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 18px 28px;
+    }
+
+    .query-label {
+      font-size: 15px;
+      font-weight: 600;
+      color: #303133;
+      white-space: nowrap;
+    }
+
+    .query-input {
+      width: 280px;
+    }
+
+    .query-btn {
+      min-width: 100px;
+    }
+
+    /* ===== 瀹㈡埛淇℃伅鍖?- 宸﹀彸甯冨眬 ===== */
+    .customer-section {
+      display: flex;
+      gap: 16px;
+      margin-bottom: 16px;
+      align-items: stretch;
+    }
+
+    .customer-left {
+      flex: 0 0 58%;
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .customer-left .card-title {
+      flex-shrink: 0;
+    }
+
+    .customer-left .tag-grid {
+      flex: 1;
+    }
+
+    .customer-right {
+      flex: 0 0 calc(42% - 16px);
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .customer-right .card-title {
+      flex-shrink: 0;
+    }
+
+    .customer-right .radar-container {
+      flex: 1;
+    }
+
+    /* 鏍囩缃戞牸 */
+    .tag-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 2px 16px;
+    }
+
+    .tag-item {
+      display: flex;
+      align-items: center;
+      font-size: 13px;
+      line-height: 1.7;
+      padding: 2px 0;
+      border-bottom: 1px solid #f5f7fa;
+    }
+
+    .tag-label {
+      color: #909399;
+      flex-shrink: 0;
+      min-width: 100px;
+    }
+
+    .tag-value {
+      color: #303133;
+      font-weight: 500;
+    }
+
+    /* ===== 闆疯揪鍥惧尯 ===== */
+    .radar-container {
+      width: 100%;
+      height: 100%;
+      min-height: 280px;
+    }
+
+    /* ===== 鎺ㄨ崘鏂规琛ㄦ牸 ===== */
+    .plan-table-wrapper {
+      overflow-x: auto;
+    }
+
+    .plan-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+
+    .plan-table th {
+      background: #f5f7fa;
+      color: #606266;
+      font-weight: 700;
+      padding: 12px 14px;
+      text-align: center;
+      border-bottom: 2px solid #e4e7ed;
+      white-space: nowrap;
+    }
+
+    .plan-table td {
+      padding: 12px 14px;
+      text-align: center;
+      border-bottom: 1px solid #ebeef5;
+      color: #303133;
+      transition: background 0.2s ease;
+    }
+
+    .plan-table tbody tr {
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .plan-table tbody tr:hover {
+      background: #f0f7ff;
+    }
+
+    .plan-table tbody tr.selected {
+      background: #ecf5ff;
+      border-left: 3px solid #409EFF;
+    }
+
+    .plan-table tbody tr.selected td {
+      color: #1a6fb5;
+      font-weight: 600;
+    }
+
+    .plan-table .select-btn {
+      padding: 6px 20px;
+    }
+
+    .plan-table .ai-badge {
+      display: inline-block;
+      background: linear-gradient(135deg, #ff9500, #ff6b35);
+      color: #fff;
+      font-size: 11px;
+      padding: 2px 8px;
+      border-radius: 10px;
+      margin-left: 6px;
+      vertical-align: middle;
+    }
+
+    /* ===== 鎺ㄨ崘璇濇湳 + 浜у搧鎻忚堪 ===== */
+    .script-desc-section {
+      display: flex;
+      gap: 16px;
+      margin-bottom: 16px;
+    }
+
+    .script-left {
+      flex: 0 0 50%;
+    }
+
+    .desc-right {
+      flex: 0 0 calc(50% - 16px);
+    }
+
+    /* 鎺ㄨ崘璇濇湳鎻愮ず妗?*/
+    .script-box {
+      background: #fdf6ec;
+      border: 1px solid #faecd8;
+      border-left: 4px solid #e6a23c;
+      border-radius: 8px;
+      padding: 18px 20px;
+      font-size: 14px;
+      line-height: 1.9;
+      color: #5c4a2e;
+      min-height: 180px;
+    }
+
+    .script-box p {
+      margin-bottom: 6px;
+    }
+
+    .script-box .highlight {
+      color: #e6a23c;
+      font-weight: 700;
+    }
+
+    /* 浜у搧鎻忚堪 */
+    .desc-content {
+      font-size: 14px;
+      line-height: 2;
+      color: #303133;
+    }
+
+    .desc-content .product-name {
+      font-size: 16px;
+      font-weight: 700;
+      color: #1a6fb5;
+      margin-bottom: 10px;
+    }
+
+    .desc-content .product-code {
+      color: #909399;
+      font-size: 13px;
+      margin-bottom: 12px;
+    }
+
+    .desc-content ol {
+      padding-left: 20px;
+    }
+
+    .desc-content ol li {
+      margin-bottom: 4px;
+      color: #606266;
+    }
+
+    /* ===== 搴曢儴鍔炵悊鍖?===== */
+    .footer-bar {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: #ffffff;
+      border-top: 1px solid #e4e7ed;
+      padding: 16px 0;
+      text-align: center;
+      box-shadow: 0 -2px 12px rgba(0, 0, 0, 0.06);
+      z-index: 100;
+    }
+
+    .submit-btn {
+      width: 240px;
+      height: 48px;
+      font-size: 17px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      border-radius: 8px;
+    }
+
+    /* ===== Element Plus 寰皟 ===== */
+    .el-input__inner {
+      border-radius: 8px;
+    }
+
+    .el-button--primary {
+      background: linear-gradient(180deg, #55a8fd 0%, #409EFF 100%);
+      border-color: #409EFF;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(64, 158, 255, 0.3);
+    }
+
+    .el-button--primary:hover {
+      background: linear-gradient(180deg, #66b1ff 0%, #509eff 100%);
+      border-color: #66b1ff;
+      box-shadow: 0 4px 12px rgba(64, 158, 255, 0.45);
+    }
+
+    .el-button--default.is-plain {
+      border-radius: 8px;
+      color: #409EFF;
+      border-color: #409EFF;
+    }
+
+    .el-button--default.is-plain:hover {
+      background: #ecf5ff;
+    }
+
+    .el-radio-group {
+      display: none;
+    }
+
+    /* 鍝嶅簲寮?*/
+    @media (max-width: 1400px) {
+      .customer-section {
+        flex-direction: column;
+      }
+      .customer-left,
+      .customer-right {
+        flex: 1 1 auto;
+      }
+      .script-desc-section {
+        flex-direction: column;
+      }
+      .script-left,
+      .desc-right {
+        flex: 1 1 auto;
+      }
+      .tag-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .tag-grid {
+        grid-template-columns: 1fr;
+      }
+      .query-section {
+        flex-wrap: wrap;
+      }
+      .query-input {
+        width: 100%;
+      }
+    }
+
+    /* 杩囨浮鍔ㄧ敾 */
+    .fade-enter-active,
+    .fade-leave-active {
+      transition: opacity 0.3s ease;
+    }
+    .fade-enter-from,
+    .fade-leave-to {
+      opacity: 0;
+    }
+
+    /* 婊氬姩鏉＄編鍖?*/
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #f5f7fa;
+      border-radius: 3px;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #c0c4cc;
+      border-radius: 3px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #909399;
+    }
+  </style>
+</head>
+<body>
+
+<div id="app">
+  <div class="app-container">
+    <!-- ===== 涓€銆侀《閮ㄦ煡璇㈠尯 ===== -->
+    <div class="card query-section">
+      <span class="query-label">馃摫 鎵嬫満鍙风爜锛?/span>
+      <el-input
+        v-model="phoneNumber"
+        placeholder="璇疯緭鍏ユ墜鏈哄彿鐮?
+        maxlength="11"
+        show-word-limit
+        clearable
+        class="query-input"
+        @keyup.enter="handleQuery"
+      >
+        <template #prefix>
+          <span style="color:#909399;">馃摓</span>
+        </template>
+      </el-input>
+      <el-button type="primary" class="query-btn" @click="handleQuery" :loading="queryLoading" :icon="'Search'">
+        鏌?璇?      </el-button>
+      <el-button text style="color:#909399;margin-left:8px;" @click="handleReset">
+        閲嶇疆
+      </el-button>
+    </div>
+
+    <!-- ===== 浜屻€佸鎴蜂俊鎭尯锛堟煡璇㈠悗鏄剧ず锛?===== -->
+    <div v-show="showResult" class="customer-section">
+      <!-- 宸︿晶锛氬鎴锋爣绛?-->
+      <div class="card customer-left">
+        <div class="card-title">馃彿锔?瀹㈡埛鏍囩</div>
+        <div class="tag-grid">
+          <div class="tag-item"><span class="tag-label">鍙风爜锛?/span><span class="tag-value">{{ customerInfo.phone }}</span></div>
+          <div class="tag-item"><span class="tag-label">鍏ㄧ悆閫氱瓑绾э細</span><span class="tag-value" style="color:#e6a23c;font-weight:700;">{{ customerInfo.globalLevel }}</span></div>
+          <div class="tag-item"><span class="tag-label">鍏ョ綉鏃堕棿锛?/span><span class="tag-value">{{ customerInfo.joinDate }}</span></div>
+          <div class="tag-item"><span class="tag-label">缃戦緞锛?/span><span class="tag-value">{{ customerInfo.netAge }}</span></div>
+          <div class="tag-item"><span class="tag-label">濂楅鍚嶇О锛?/span><span class="tag-value">{{ customerInfo.packageName }}</span></div>
+          <div class="tag-item"><span class="tag-label">濂楅璐癸細</span><span class="tag-value">{{ customerInfo.packageFee }}鍏?/span></div>
+          <div class="tag-item"><span class="tag-label">濂楀唴璇煶锛?/span><span class="tag-value">{{ customerInfo.voiceInPackage }}</span></div>
+          <div class="tag-item"><span class="tag-label">濂楀唴娴侀噺锛?/span><span class="tag-value">{{ customerInfo.dataInPackage }}</span></div>
+          <div class="tag-item"><span class="tag-label">濂楀唴璇煶浣跨敤锛?/span><span class="tag-value">{{ customerInfo.voiceUsed }}</span></div>
+          <div class="tag-item"><span class="tag-label">濂楀唴娴侀噺浣跨敤锛?/span><span class="tag-value">{{ customerInfo.dataUsed }}</span></div>
+          <div class="tag-item"><span class="tag-label">鏄惁鍚堟埛锛?/span><span class="tag-value">{{ customerInfo.isJointAccount }}</span></div>
+          <div class="tag-item"><span class="tag-label">瀹藉甫甯﹀锛?/span><span class="tag-value">{{ customerInfo.broadbandSpeed }}</span></div>
+          <div class="tag-item"><span class="tag-label">鏄惁榄旂櫨鐩掞細</span><span class="tag-value">{{ customerInfo.hasMoBaiHe }}</span></div>
+          <div class="tag-item"><span class="tag-label">鏄惁缁勭綉锛?/span><span class="tag-value">{{ customerInfo.hasNetworking }}</span></div>
+          <div class="tag-item"><span class="tag-label">閫氫俊娑堣垂锛?/span><span class="tag-value">{{ customerInfo.communicationFee }}鍏?/span></div>
+          <div class="tag-item"><span class="tag-label">鏈堝潎璐﹀崟娑堣垂锛?/span><span class="tag-value">{{ customerInfo.avgMonthlyBill }}鍏?/span></div>
+          <div class="tag-item"><span class="tag-label">鏈堝潎娴侀噺浣跨敤锛?/span><span class="tag-value">{{ customerInfo.avgDataUsage }}</span></div>
+          <div class="tag-item"><span class="tag-label">鏈堝潎璇煶浣跨敤锛?/span><span class="tag-value">{{ customerInfo.avgVoiceUsage }}</span></div>
+          <div class="tag-item"><span class="tag-label">鏈堝潎娴侀噺楗卞拰搴︼細</span><span class="tag-value">{{ customerInfo.dataSaturation }}</span></div>
+          <div class="tag-item"><span class="tag-label">鏄惁闆嗗洟V缃戯細</span><span class="tag-value">{{ customerInfo.isGroupVNet }}</span></div>
+          <div class="tag-item"><span class="tag-label">鏄惁瀹跺涵V缃戯細</span><span class="tag-value">{{ customerInfo.isFamilyVNet }}</span></div>
+          <div class="tag-item"><span class="tag-label">鏈堝潎娴侀噺璐逛娇鐢細</span><span class="tag-value">{{ customerInfo.avgDataFee }}鍏?/span></div>
+          <div class="tag-item"><span class="tag-label">鏈堝潎濂楀寘璐逛娇鐢細</span><span class="tag-value">{{ customerInfo.avgPackageFee }}鍏?/span></div>
+        </div>
+      </div>
+
+      <!-- 鍙充晶锛氶浄杈惧浘 -->
+      <div class="card customer-right">
+        <div class="card-title">馃摗 瀹㈡埛鐢诲儚鍒嗘瀽</div>
+        <div ref="radarChart" class="radar-container"></div>
+      </div>
+    </div>
+
+    <!-- ===== 涓夈€佹帹鑽愭柟妗堝尯锛堟煡璇㈠悗鏄剧ず锛?===== -->
+    <div v-show="showResult" class="card">
+      <div class="card-title">
+        馃幆 鎺ㄨ崘鏂规
+        <span style="font-size:12px;color:#909399;font-weight:400;margin-left:8px;">璇烽€夋嫨涓€涓柟妗?/span>
+      </div>
+
+      <div class="plan-table-wrapper">
+        <table class="plan-table">
+          <thead>
+            <tr>
+              <th style="width:60px;">搴忓彿</th>
+              <th style="width:90px;">鏂规绫诲瀷</th>
+              <th>浜у搧鍚嶇О</th>
+              <th style="width:80px;">鍚堢害鏈?/th>
+              <th>浜у搧璧勬簮</th>
+              <th>浜у搧浼樺娍</th>
+              <th style="width:100px;">鎿嶄綔</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr
+              v-for="plan in planList"
+              :key="plan.id"
+              :class="{ selected: selectedPlanId === plan.id }"
+              @click="handleSelectPlan(plan)"
+            >
+              <td>
+                {{ plan.label }}
+
+              </td>
+              <td>{{ plan.type }}</td>
+              <td style="text-align:left;padding-left:20px;">{{ plan.productName }}</td>
+              <td>{{ plan.contractPeriod }}</td>
+              <td style="text-align:left;padding-left:20px;">{{ plan.resources }}</td>
+              <td style="text-align:left;padding-left:20px;">{{ plan.advantages }}</td>
+              <td>
+                <el-button
+                  :type="selectedPlanId === plan.id ? 'primary' : 'default'"
+                  :plain="selectedPlanId !== plan.id"
+                  size="small"
+                  class="select-btn"
+                  @click.stop="handleSelectPlan(plan)"
+                >
+                  {{ selectedPlanId === plan.id ? '鉁?宸查€? : '閫?鎷? }}
+                </el-button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ===== 鍥涖€佹帹鑽愯瘽鏈?+ 浜у搧鎻忚堪锛堟煡璇㈠悗鏄剧ず锛?===== -->
+    <div v-show="showResult" class="script-desc-section">
+      <!-- 宸︿晶锛氭帹鑽愯瘽鏈?-->
+      <div class="card script-left">
+        <div class="card-title">馃挰 鎺ㄨ崘璇濇湳</div>
+        <div class="script-box">
+          <p>{{ currentScript.line1 }}</p>
+          <p>{{ currentScript.line2 }}</p>
+          <p>{{ currentScript.line3 }}</p>
+          <p>{{ currentScript.line4 }}</p>
+        </div>
+      </div>
+
+      <!-- 鍙充晶锛氫骇鍝佹弿杩?-->
+      <div class="card desc-right">
+        <div class="card-title">馃摑 浜у搧鎻忚堪</div>
+        <div class="desc-content">
+          <div class="product-name">{{ currentProduct.name }}</div>
+          <div class="product-code">浜у搧缂栫爜锛歿{ currentProduct.code }}</div>
+          <ol>
+            <li v-for="(item, idx) in currentProduct.details" :key="idx">{{ item }}</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== 浜斻€佸簳閮ㄥ姙鐞嗗尯 ===== -->
+  <div v-show="showResult" class="footer-bar">
+    <el-button
+      type="primary"
+      class="submit-btn"
+      size="large"
+      @click="handleSubmit"
+      :disabled="!selectedPlanId"
+    >
+      鉁?绔?鍗?鍔?鐞?    </el-button>
+    <div style="margin-top:6px;font-size:12px;color:#c0c4cc;" v-if="!selectedPlanId">
+      璇峰厛鍦ㄦ帹鑽愭柟妗堜腑閫夋嫨涓€涓柟妗?    </div>
+    <div style="margin-top:6px;font-size:12px;color:#909399;" v-else>
+      褰撳墠閫変腑锛?span style="color:#409EFF;font-weight:600;">{{ selectedPlanName }}</span>
+    </div>
+  </div>
+
+  <!-- 鍔炵悊纭瀵硅瘽妗?-->
+  <el-dialog
+    v-model="confirmDialogVisible"
+    title="鍔炵悊纭"
+    width="460px"
+    :close-on-click-modal="false"
+    center
+  >
+    <div style="text-align:center;padding:16px 0;font-size:16px;line-height:1.8;">
+      <p style="margin-bottom:12px;color:#606266;">纭鍔炵悊浠ヤ笅浜у搧锛?/p>
+      <p style="font-size:20px;font-weight:700;color:#1a6fb5;">
+        {{ submitTargetName }}
+      </p>
+      <p style="margin-top:8px;font-size:13px;color:#909399;">
+        鎵嬫満鍙风爜锛歿{ customerInfo.phone }}
+      </p>
+    </div>
+    <template #footer>
+      <div style="display:flex;justify-content:center;gap:16px;">
+        <el-button @click="confirmDialogVisible = false" size="large" style="width:120px;">
+          鍙?娑?        </el-button>
+        <el-button type="primary" @click="handleConfirmSubmit" size="large" style="width:140px;" :loading="submitLoading">
+          纭鍔炵悊
+        </el-button>
+      </div>
+    </template>
+  </el-dialog>
+</div>
+
+<script>
+  const { createApp, ref, reactive, nextTick, onMounted, computed, watch } = Vue
+
+  const app = createApp({
+    setup() {
+      // ===== 鍝嶅簲寮忔暟鎹?=====
+      const phoneNumber = ref('')
+      const queryLoading = ref(false)
+      const submitLoading = ref(false)
+      const showResult = ref(true)
+      const selectedPlanId = ref(null)
+      const confirmDialogVisible = ref(false)
+      const radarChart = ref(null)
+      let chartInstance = null
+
+      const agentName = ref('寮犲皬鏄?)
+      const currentTime = ref('')
+
+      // 鏇存柊鏃堕棿
+      const updateTime = () => {
+        const now = new Date()
+        const pad = n => String(n).padStart(2, '0')
+        currentTime.value = `${now.getFullYear()}-${pad(now.getMonth()+1)}-${pad(now.getDate())} ${pad(now.getHours())}:${pad(now.getMinutes())}:${pad(now.getSeconds())}`
+      }
+      updateTime()
+      setInterval(updateTime, 1000)
+
+      // ===== 瀹㈡埛淇℃伅 =====
+      const customerInfo = reactive({
+        phone: '',
+        globalLevel: '',
+        joinDate: '',
+        netAge: '',
+        packageName: '',
+        packageFee: '',
+        voiceInPackage: '',
+        dataInPackage: '',
+        voiceUsed: '',
+        dataUsed: '',
+        isJointAccount: '',
+        broadbandSpeed: '',
+        hasMoBaiHe: '',
+        hasNetworking: '',
+        communicationFee: '',
+        avgMonthlyBill: '',
+        avgDataUsage: '',
+        avgVoiceUsage: '',
+        dataSaturation: '',
+        isGroupVNet: '',
+        isFamilyVNet: '',
+        avgDataFee: '',
+        avgPackageFee: ''
+      })
+
+      // ===== 闆疯揪鍥炬暟鎹?=====
+      const radarData = reactive({
+        indicators: [
+          { name: '鎬绘祦閲忎娇鐢紙GB锛?, max: 100 },
+          { name: '濂楀唴娴侀噺浣跨敤锛圙B锛?, max: 100 },
+          { name: '濂楀唴娴侀噺楗卞拰搴︼紙%锛?, max: 100 },
+          { name: '濂楀唴璇煶楗卞拰搴︼紙%锛?, max: 100 },
+          { name: '鏄惁瀹藉甫', max: 100 }
+        ],
+        values: [90, 80, 95, 60, 100]
+      })
+
+      // ===== 鏂规鍒楄〃 =====
+      const planList = ref([
+        {
+          id: 1,
+          label: '鏂规涓€',
+          type: '鐖卞濂楅',
+          productName: '鐖卞濂楅119鍏冩。 / 鐖卞濂楅149鍏冩。',
+          contractPeriod: '36涓湀',
+          resources: '50G銆?00鍒嗛挓銆?00M / 80G銆?00鍒嗛挓銆?000M',
+          advantages: '鍗曚环浣庛€佸甫瀹介珮 / 璇煶澶氥€佹祦閲忓銆佸甫瀹介珮',
+          isRecommended: false
+        },
+        {
+          id: 2,
+          label: '鏂规浜?,
+          type: '娴侀噺鍚堢害',
+          productName: '鎵胯娑堣垂浜祦閲忚豹绀硷紙50鍏冿級',
+          contractPeriod: '36涓湀',
+          resources: '30GB',
+          advantages: '淇濆簳娑堣垂棰濆璧犻€?,
+          isRecommended: false
+        },
+        {
+          id: 3,
+          label: '鏂规涓?,
+          type: '娴侀噺鍖?,
+          productName: '30鍏?0G娴侀噺鍖?,
+          contractPeriod: '鏃?,
+          resources: '30GB',
+          advantages: '璁㈣喘閫€璁㈣嚜鐢?,
+          isRecommended: false
+        }
+      ])
+
+      // ===== 涓嶅悓鏂规瀵瑰簲鐨勮瘽鏈拰浜у搧鎻忚堪 =====
+      const scriptDataMap = {
+        1: {
+          line1: '鏌ョ湅鎮ㄨ处鎴蜂娇鐢ㄦ儏鍐碉紝鎮ㄥ钩鏃舵祦閲忓拰瀹藉甫浣跨敤闇€姹傝緝楂橈紝鐜版湁濂楅宸叉棤娉曟弧瓒虫棩甯镐娇鐢ㄩ渶姹傘€?,
+          line2: '缁欐偍鎺ㄨ崘銆愮埍瀹跺椁?19鍏冩。 / 鐖卞濂楅149鍏冩。銆戜骇鍝併€?,
+          line3: '鍔炵悊鍚庝韩鍙楀ぇ娴侀噺銆侀珮甯﹀銆佸璇煶锛屾弧瓒冲叏瀹堕€氫俊闇€姹傘€?,
+          line4: '鐩歌緝浜庡崟鐙璐悇椤规湇鍔℃洿鍔犱紭鎯狅紝鍏ㄥ鍏变韩鏇村姞鍒掔畻锛屾€т环姣旇緝楂橈紝鎺ㄨ崘鎮ㄥ姙鐞嗐€?
+        },
+        2: {
+          line1: '鏌ョ湅鎮ㄨ处鎴蜂娇鐢ㄦ儏鍐碉紝鎮ㄥ钩鏃舵祦閲忎娇鐢ㄦ瘮杈冪揣寮狅紝鐜版湁濂楅宸叉棤娉曟弧瓒虫棩甯镐娇鐢ㄩ渶姹傘€?,
+          line2: '缁欐偍鎺ㄨ崘銆愭壙璇烘秷璐逛韩娴侀噺璞ぜ锛?0鍏冿級銆戜骇鍝併€?,
+          line3: '鍔炵悊鍚庢壙璇哄搴斾繚搴曟秷璐癸紝姣忔湀棰濆璧犻€?0GB鍥藉唴閫氱敤娴侀噺銆?,
+          line4: '鐩歌緝浜庡崟鐙璐祦閲忓寘鏇村姞浼樻儬锛岄暱鏈熶娇鐢ㄦ洿鍔犲垝绠楋紝鎬т环姣旇緝楂橈紝鎺ㄨ崘鎮ㄥ姙鐞嗐€?
+        },
+        3: {
+          line1: '鏌ョ湅鎮ㄨ处鎴蜂娇鐢ㄦ儏鍐碉紝鎮ㄥ钩鏃舵祦閲忎娇鐢ㄥ伓灏旂揣寮狅紝闇€瑕佷竴涓伒娲荤殑娴侀噺琛ュ厖鏂规銆?,
+          line2: '缁欐偍鎺ㄨ崘銆?0鍏?0G娴侀噺鍖呫€戜骇鍝併€?,
+          line3: '鍔炵悊鍚庢瘡鏈堜韩30GB鍥藉唴閫氱敤娴侀噺锛岄殢璁㈤殢鐢紝鐏垫椿鏂逛究銆?,
+          line4: '璁㈣喘閫€璁㈣嚜鐢憋紝鏃犲悎绾︽潫缂氾紝閫傚悎鐭湡娴侀噺琛ュ厖闇€姹傦紝鎺ㄨ崘鎮ㄥ姙鐞嗐€?
+        }
+      }
+
+      const productDataMap = {
+        1: {
+        name: '鐖卞濂楅119鍏冩。 / 鐖卞濂楅149鍏冩。',
+        code: '600000458521 / 600000458522',
+        details: [
+          '鐖卞濂楅119鍏冩。锛氭瘡鏈?19鍏冿紝鍖呭惈50GB鍥藉唴閫氱敤娴侀噺銆?00鍒嗛挓鍥藉唴璇煶銆?00M瀹藉甫锛堜笉鍚腐婢冲彴鍦板尯锛夈€?,
+          '鐖卞濂楅149鍏冩。锛氭瘡鏈?49鍏冿紝鍖呭惈80GB鍥藉唴閫氱敤娴侀噺銆?00鍒嗛挓鍥藉唴璇煶銆?000M瀹藉甫锛堜笉鍚腐婢冲彴鍦板尯锛夈€?,
+          '璁㈣喘鎴愬姛绔嬪嵆鐢熸晥锛屼骇鍝佽嚜鐢熸晥涔嬫棩璧锋湁鏁堟湡36涓湀銆?,
+          '鍚堢害鏈熷唴鎸佺画璧犻€佹祦閲忓強瀹藉甫璧勬簮锛屾敮鎸佸搴垚鍛樺叡浜€?,
+          '鍒版湡鍚庢寜杩愯惀鍟嗚鍒欐墽琛岋紝鍙画绾︽垨鍙樻洿濂楅銆?
+        ]
+      },
+        2: {
+          name: '鎵胯娑堣垂浜祦閲忚豹绀硷紙50鍏冿級',
+          code: '600000458523',
+          details: [
+            '姣忔湀50鍏冿紝鍖呭惈30GB鍥藉唴閫氱敤娴侀噺锛堜笉鍚腐婢冲彴鍦板尯锛夈€?,
+            '璁㈣喘鎴愬姛绔嬪嵆鐢熸晥銆?,
+            '浜у搧鑷敓鏁堜箣鏃ヨ捣鏈夋晥鏈?6涓湀銆?,
+            '鍚堢害鏈熷唴鎸佺画璧犻€佹祦閲忚祫婧愩€?,
+            '鍒版湡鍚庢寜杩愯惀鍟嗚鍒欐墽琛屻€?
+          ]
+        },
+        3: {
+          name: '30鍏?0G娴侀噺鍖?,
+          code: '600000458530',
+          details: [
+            '姣忔湀30鍏冿紝鍖呭惈30GB鍥藉唴閫氱敤娴侀噺锛堜笉鍚腐婢冲彴鍦板尯锛夈€?,
+            '璁㈣喘鎴愬姛绔嬪嵆鐢熸晥锛屾棤鍚堢害鏈熼檺鍒躲€?,
+            '鍙殢鏃堕€€璁紝娆℃湀鐢熸晥锛岀伒娲讳究鎹枫€?,
+            '娴侀噺褰撴湀鏈夋晥锛屼笉鍙粨杞嚦娆℃湀銆?,
+            '閫傚悎涓存椂鎬ф垨鍛ㄦ湡鎬ф祦閲忚ˉ鍏呴渶姹傘€?
+          ]
+        }
+      }
+
+      const currentScript = reactive({
+        line1: '',
+        line2: '',
+        line3: '',
+        line4: ''
+      })
+
+      const currentProduct = reactive({
+        name: '',
+        code: '',
+        details: []
+      })
+
+      // ===== 璁＄畻灞炴€?=====
+      const selectedPlanName = computed(() => {
+        const plan = planList.value.find(p => p.id === selectedPlanId.value)
+        return plan ? plan.productName : ''
+      })
+
+      const submitTargetName = computed(() => {
+        const plan = planList.value.find(p => p.id === selectedPlanId.value)
+        return plan ? plan.productName : ''
+      })
+
+      // ===== 鏇存柊璇濇湳鍜屼骇鍝佹弿杩?=====
+      const updateScriptAndProduct = (planId) => {
+        const script = scriptDataMap[planId]
+        if (script) {
+          currentScript.line1 = script.line1
+          currentScript.line2 = script.line2
+          currentScript.line3 = script.line3
+          currentScript.line4 = script.line4
+        }
+        const product = productDataMap[planId]
+        if (product) {
+          currentProduct.name = product.name
+          currentProduct.code = product.code
+          currentProduct.details = [...product.details]
+        }
+      }
+
+      // ===== 鏌ヨ =====
+      const handleQuery = async () => {
+        // 鏍￠獙鎵嬫満鍙?        const phoneReg = /^1[3-9]\d{9}$/
+        if (!phoneReg.test(phoneNumber.value)) {
+          ElementPlus.ElMessage.warning('璇疯緭鍏ユ纭殑11浣嶆墜鏈哄彿鐮?)
+          return
+        }
+
+        queryLoading.value = true
+
+        // 妯℃嫙鎺ュ彛璇锋眰
+        await new Promise(resolve => setTimeout(resolve, 800))
+
+        // 濉厖瀹㈡埛淇℃伅
+        const maskedPhone = phoneNumber.value.substring(0, 3) + '****' + phoneNumber.value.substring(7)
+        customerInfo.phone = maskedPhone
+        customerInfo.globalLevel = 'V3'
+        customerInfo.joinDate = '2018-03-15'
+        customerInfo.netAge = '7骞?
+        customerInfo.packageName = '5G鐣呬韩濂楅79鍏冩。'
+        customerInfo.packageFee = '79'
+        customerInfo.voiceInPackage = '300鍒嗛挓'
+        customerInfo.dataInPackage = '30GB'
+        customerInfo.voiceUsed = '180鍒嗛挓'
+        customerInfo.dataUsed = '45GB'
+        customerInfo.isJointAccount = '鏄?
+        customerInfo.broadbandSpeed = '500M'
+        customerInfo.hasMoBaiHe = '鏄?
+        customerInfo.hasNetworking = '鏄?
+        customerInfo.communicationFee = '132'
+        customerInfo.avgMonthlyBill = '128'
+        customerInfo.avgDataUsage = '42GB'
+        customerInfo.avgVoiceUsage = '220鍒嗛挓'
+        customerInfo.dataSaturation = '150%'
+        customerInfo.isGroupVNet = '鍚?
+        customerInfo.isFamilyVNet = '鏄?
+        customerInfo.avgDataFee = '48'
+        customerInfo.avgPackageFee = '20'
+
+        // 榛樿閫変腑AI鎺ㄨ崘鏂规锛堟柟妗堜簩锛?        selectedPlanId.value = 2
+        updateScriptAndProduct(2)
+
+        showResult.value = true
+        queryLoading.value = false
+
+        // 娓叉煋闆疯揪鍥?        await nextTick()
+        renderRadarChart()
+
+        ElementPlus.ElMessage.success('鏌ヨ鎴愬姛')
+      }
+
+      // ===== 鏂规閫夋嫨 =====
+      const handleSelectPlan = (plan) => {
+        selectedPlanId.value = plan.id
+        updateScriptAndProduct(plan.id)
+        ElementPlus.ElMessage({
+          message: `宸查€夋嫨锛?{plan.productName}`,
+          type: 'success',
+          duration: 1500
+        })
+      }
+
+      // ===== 鍔炵悊 =====
+      const handleSubmit = () => {
+        if (!selectedPlanId.value) {
+          ElementPlus.ElMessage.warning('璇峰厛閫夋嫨涓€涓帹鑽愭柟妗?)
+          return
+        }
+        confirmDialogVisible.value = true
+      }
+
+      const handleConfirmSubmit = async () => {
+        submitLoading.value = true
+
+        // 妯℃嫙鍔炵悊鎺ュ彛
+        await new Promise(resolve => setTimeout(resolve, 1200))
+
+        submitLoading.value = false
+        confirmDialogVisible.value = false
+
+        ElementPlus.ElMessage({
+          message: '馃帀 鍔炵悊鎴愬姛锛佷骇鍝佸凡鐢熸晥锛屾劅璋㈡偍鐨勫姙鐞嗐€?,
+          type: 'success',
+          duration: 3000,
+          showClose: true
+        })
+
+        // 鍒锋柊瀹㈡埛淇℃伅锛堟ā鎷燂級
+        await new Promise(resolve => setTimeout(resolve, 500))
+        customerInfo.packageName = currentProduct.name
+        customerInfo.dataSaturation = '70%'
+        radarData.values = [60, 45, 70, 60, 100]
+        await nextTick()
+        renderRadarChart()
+      }
+
+      // ===== 閲嶇疆 =====
+      const handleReset = () => {
+        phoneNumber.value = ''
+        ElementPlus.ElMessage.info('宸查噸缃?)
+      }
+
+      // ===== 闆疯揪鍥炬覆鏌?=====
+      const renderRadarChart = () => {
+        if (!radarChart.value) return
+
+        if (chartInstance) {
+          chartInstance.dispose()
+        }
+
+        chartInstance = echarts.init(radarChart.value)
+
+        const option = {
+          tooltip: {
+            trigger: 'item',
+            backgroundColor: 'rgba(255,255,255,0.95)',
+            borderColor: '#409EFF',
+            borderWidth: 1,
+            textStyle: {
+              color: '#303133',
+              fontSize: 13
+            },
+            formatter: function(params) {
+              let result = `<strong style="color:#1a6fb5;">瀹㈡埛鐢诲儚鍒嗘瀽</strong><br/>`
+              if (params.value) {
+                const names = radarData.indicators.map(i => i.name)
+                params.value.forEach((v, i) => {
+                  const display = names[i] === '鏄惁瀹藉甫' ? (v >= 50 ? '鏄? : '鍚?) : v
+                  result += `${names[i]}锛?strong>${display}</strong><br/>`
+                })
+              }
+              return result
+            }
+          },
+          legend: {
+            bottom: 10,
+            data: ['褰撳墠瀹㈡埛'],
+            textStyle: {
+              color: '#606266',
+              fontSize: 13
+            }
+          },
+          radar: {
+            center: ['50%', '48%'],
+            radius: '68%',
+            indicator: radarData.indicators,
+            axisName: {
+              color: '#303133',
+              fontSize: 13,
+              borderRadius: 3,
+              padding: [3, 5]
+            },
+            shape: 'polygon',
+            splitNumber: 5,
+            axisNameGap: 8,
+            splitArea: {
+              areaStyle: {
+                color: ['rgba(64,158,255,0.02)', 'rgba(64,158,255,0.02)',
+                        'rgba(64,158,255,0.04)', 'rgba(64,158,255,0.04)',
+                        'rgba(64,158,255,0.06)']
+              }
+            },
+            splitLine: {
+              lineStyle: {
+                color: 'rgba(64,158,255,0.2)'
+              }
+            },
+            axisLine: {
+              lineStyle: {
+                color: 'rgba(64,158,255,0.3)'
+              }
+            }
+          },
+          series: [
+            {
+              name: '褰撳墠瀹㈡埛',
+              type: 'radar',
+              data: [
+                {
+                  value: radarData.values,
+                  name: '褰撳墠瀹㈡埛',
+                  areaStyle: {
+                    color: {
+                      type: 'linear',
+                      x: 0, y: 0, x2: 0, y2: 1,
+                      colorStops: [
+                        { offset: 0, color: 'rgba(64,158,255,0.50)' },
+                        { offset: 1, color: 'rgba(64,158,255,0.08)' }
+                      ]
+                    }
+                  },
+                  lineStyle: {
+                    color: '#409EFF',
+                    width: 2.5
+                  },
+                  itemStyle: {
+                    color: '#409EFF',
+                    borderColor: '#fff',
+                    borderWidth: 2
+                  },
+                  symbol: 'circle',
+                  symbolSize: 8
+                }
+              ]
+            }
+          ]
+        }
+
+        chartInstance.setOption(option)
+
+        // 鍝嶅簲寮忚皟鏁?        window.addEventListener('resize', () => {
+          if (chartInstance) {
+            chartInstance.resize()
+          }
+        })
+      }
+
+      // ===== 鐢熷懡鍛ㄦ湡 =====
+      onMounted(() => {
+        // 鍒濆鍖栨暟鎹?        customerInfo.phone = '138****8888'
+        customerInfo.globalLevel = 'V3'
+        customerInfo.joinDate = '2018-03-15'
+        customerInfo.netAge = '7骞?
+        customerInfo.packageName = '5G鐣呬韩濂楅79鍏冩。'
+        customerInfo.packageFee = '79'
+        customerInfo.voiceInPackage = '300鍒嗛挓'
+        customerInfo.dataInPackage = '30GB'
+        customerInfo.voiceUsed = '180鍒嗛挓'
+        customerInfo.dataUsed = '45GB'
+        customerInfo.isJointAccount = '鏄?
+        customerInfo.broadbandSpeed = '500M'
+        customerInfo.hasMoBaiHe = '鏄?
+        customerInfo.hasNetworking = '鏄?
+        customerInfo.communicationFee = '132'
+        customerInfo.avgMonthlyBill = '128'
+        customerInfo.avgDataUsage = '42GB'
+        customerInfo.avgVoiceUsage = '220鍒嗛挓'
+        customerInfo.dataSaturation = '150%'
+        customerInfo.isGroupVNet = '鍚?
+        customerInfo.isFamilyVNet = '鏄?
+        customerInfo.avgDataFee = '48'
+        customerInfo.avgPackageFee = '20'
+
+        // 榛樿閫変腑AI鎺ㄨ崘鏂规锛堟柟妗堜簩锛?        selectedPlanId.value = 2
+        updateScriptAndProduct(2)
+
+        showResult.value = true
+
+        // 娓叉煋闆疯揪鍥?        nextTick(() => {
+          renderRadarChart()
+        })
+      })
+
+      return {
+        phoneNumber,
+        queryLoading,
+        submitLoading,
+        showResult,
+        selectedPlanId,
+        confirmDialogVisible,
+        radarChart,
+        agentName,
+        currentTime,
+        customerInfo,
+        radarData,
+        planList,
+        currentScript,
+        currentProduct,
+        selectedPlanName,
+        submitTargetName,
+        handleQuery,
+        handleSelectPlan,
+        handleSubmit,
+        handleConfirmSubmit,
+        handleReset
+      }
+    }
+  })
+
+  // 娉ㄥ唽 Element Plus 鍥炬爣
+  app.use(ElementPlus)
+  app.mount('#app')
+</script>
+
+</body>
+</html>
