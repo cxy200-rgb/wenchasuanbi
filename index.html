@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>闂煡绠楁瘮</title>
+  <title>问查算比</title>
   <!-- Element Plus CSS -->
   <link rel="stylesheet" href="https://unpkg.com/element-plus/dist/index.css">
   <!-- ECharts -->
@@ -14,7 +14,7 @@
   <script src="https://unpkg.com/element-plus/dist/index.full.min.js"></script>
 
   <style>
-    /* ===== 鍏ㄥ眬鏍峰紡 ===== */
+    /* ===== 全局样式 ===== */
     * {
       margin: 0;
       padding: 0;
@@ -29,14 +29,14 @@
       -webkit-font-smoothing: antialiased;
     }
 
-    /* 鏁翠綋瀹瑰櫒 */
+    /* 整体容器 */
     .app-container {
       max-width: 1600px;
       margin: 0 auto;
       padding: 20px 24px 100px;
     }
 
-    /* ===== 椤堕儴鏍囬鏍?===== */
+    /* ===== 顶部标题栏 ===== */
     .header-bar {
       display: flex;
       align-items: center;
@@ -74,7 +74,7 @@
       background: rgba(255, 255, 255, 0.3);
     }
 
-    /* ===== 閫氱敤鍗＄墖鏍峰紡 ===== */
+    /* ===== 通用卡片样式 ===== */
     .card {
       background: #ffffff;
       border-radius: 10px;
@@ -110,7 +110,7 @@
       border-radius: 2px;
     }
 
-    /* ===== 鏌ヨ鍖?===== */
+    /* ===== 查询区 ===== */
     .query-section {
       display: flex;
       align-items: center;
@@ -133,7 +133,7 @@
       min-width: 100px;
     }
 
-    /* ===== 瀹㈡埛淇℃伅鍖?- 宸﹀彸甯冨眬 ===== */
+    /* ===== 客户信息区 - 左右布局 ===== */
     .customer-section {
       display: flex;
       gap: 16px;
@@ -171,7 +171,7 @@
       flex: 1;
     }
 
-    /* 鏍囩缃戞牸 */
+    /* 标签网格 */
     .tag-grid {
       display: grid;
       grid-template-columns: 1fr 1fr 1fr;
@@ -198,14 +198,14 @@
       font-weight: 500;
     }
 
-    /* ===== 闆疯揪鍥惧尯 ===== */
+    /* ===== 雷达图区 ===== */
     .radar-container {
       width: 100%;
       height: 100%;
       min-height: 280px;
     }
 
-    /* ===== 鎺ㄨ崘鏂规琛ㄦ牸 ===== */
+    /* ===== 推荐方案表格 ===== */
     .plan-table-wrapper {
       overflow-x: auto;
     }
@@ -268,7 +268,7 @@
       vertical-align: middle;
     }
 
-    /* ===== 鎺ㄨ崘璇濇湳 + 浜у搧鎻忚堪 ===== */
+    /* ===== 推荐话术 + 产品描述 ===== */
     .script-desc-section {
       display: flex;
       gap: 16px;
@@ -283,7 +283,7 @@
       flex: 0 0 calc(50% - 16px);
     }
 
-    /* 鎺ㄨ崘璇濇湳鎻愮ず妗?*/
+    /* 推荐话术提示框 */
     .script-box {
       background: #fdf6ec;
       border: 1px solid #faecd8;
@@ -305,7 +305,7 @@
       font-weight: 700;
     }
 
-    /* 浜у搧鎻忚堪 */
+    /* 产品描述 */
     .desc-content {
       font-size: 14px;
       line-height: 2;
@@ -334,7 +334,7 @@
       color: #606266;
     }
 
-    /* ===== 搴曢儴鍔炵悊鍖?===== */
+    /* ===== 底部办理区 ===== */
     .footer-bar {
       position: fixed;
       bottom: 0;
@@ -357,7 +357,7 @@
       border-radius: 8px;
     }
 
-    /* ===== Element Plus 寰皟 ===== */
+    /* ===== Element Plus 微调 ===== */
     .el-input__inner {
       border-radius: 8px;
     }
@@ -389,7 +389,7 @@
       display: none;
     }
 
-    /* 鍝嶅簲寮?*/
+    /* 响应式 */
     @media (max-width: 1400px) {
       .customer-section {
         flex-direction: column;
@@ -422,7 +422,7 @@
       }
     }
 
-    /* 杩囨浮鍔ㄧ敾 */
+    /* 过渡动画 */
     .fade-enter-active,
     .fade-leave-active {
       transition: opacity 0.3s ease;
@@ -432,7 +432,7 @@
       opacity: 0;
     }
 
-    /* 婊氬姩鏉＄編鍖?*/
+    /* 滚动条美化 */
     ::-webkit-scrollbar {
       width: 6px;
       height: 6px;
@@ -454,12 +454,12 @@
 
 <div id="app">
   <div class="app-container">
-    <!-- ===== 涓€銆侀《閮ㄦ煡璇㈠尯 ===== -->
+    <!-- ===== 一、顶部查询区 ===== -->
     <div class="card query-section">
-      <span class="query-label">馃摫 鎵嬫満鍙风爜锛?/span>
+      <span class="query-label">📱 手机号码：</span>
       <el-input
         v-model="phoneNumber"
-        placeholder="璇疯緭鍏ユ墜鏈哄彿鐮?
+        placeholder="请输入手机号码"
         maxlength="11"
         show-word-limit
         clearable
@@ -467,73 +467,74 @@
         @keyup.enter="handleQuery"
       >
         <template #prefix>
-          <span style="color:#909399;">馃摓</span>
+          <span style="color:#909399;">📞</span>
         </template>
       </el-input>
       <el-button type="primary" class="query-btn" @click="handleQuery" :loading="queryLoading" :icon="'Search'">
-        鏌?璇?      </el-button>
+        查 询
+      </el-button>
       <el-button text style="color:#909399;margin-left:8px;" @click="handleReset">
-        閲嶇疆
+        重置
       </el-button>
     </div>
 
-    <!-- ===== 浜屻€佸鎴蜂俊鎭尯锛堟煡璇㈠悗鏄剧ず锛?===== -->
+    <!-- ===== 二、客户信息区（查询后显示） ===== -->
     <div v-show="showResult" class="customer-section">
-      <!-- 宸︿晶锛氬鎴锋爣绛?-->
+      <!-- 左侧：客户标签 -->
       <div class="card customer-left">
-        <div class="card-title">馃彿锔?瀹㈡埛鏍囩</div>
+        <div class="card-title">🏷️ 客户标签</div>
         <div class="tag-grid">
-          <div class="tag-item"><span class="tag-label">鍙风爜锛?/span><span class="tag-value">{{ customerInfo.phone }}</span></div>
-          <div class="tag-item"><span class="tag-label">鍏ㄧ悆閫氱瓑绾э細</span><span class="tag-value" style="color:#e6a23c;font-weight:700;">{{ customerInfo.globalLevel }}</span></div>
-          <div class="tag-item"><span class="tag-label">鍏ョ綉鏃堕棿锛?/span><span class="tag-value">{{ customerInfo.joinDate }}</span></div>
-          <div class="tag-item"><span class="tag-label">缃戦緞锛?/span><span class="tag-value">{{ customerInfo.netAge }}</span></div>
-          <div class="tag-item"><span class="tag-label">濂楅鍚嶇О锛?/span><span class="tag-value">{{ customerInfo.packageName }}</span></div>
-          <div class="tag-item"><span class="tag-label">濂楅璐癸細</span><span class="tag-value">{{ customerInfo.packageFee }}鍏?/span></div>
-          <div class="tag-item"><span class="tag-label">濂楀唴璇煶锛?/span><span class="tag-value">{{ customerInfo.voiceInPackage }}</span></div>
-          <div class="tag-item"><span class="tag-label">濂楀唴娴侀噺锛?/span><span class="tag-value">{{ customerInfo.dataInPackage }}</span></div>
-          <div class="tag-item"><span class="tag-label">濂楀唴璇煶浣跨敤锛?/span><span class="tag-value">{{ customerInfo.voiceUsed }}</span></div>
-          <div class="tag-item"><span class="tag-label">濂楀唴娴侀噺浣跨敤锛?/span><span class="tag-value">{{ customerInfo.dataUsed }}</span></div>
-          <div class="tag-item"><span class="tag-label">鏄惁鍚堟埛锛?/span><span class="tag-value">{{ customerInfo.isJointAccount }}</span></div>
-          <div class="tag-item"><span class="tag-label">瀹藉甫甯﹀锛?/span><span class="tag-value">{{ customerInfo.broadbandSpeed }}</span></div>
-          <div class="tag-item"><span class="tag-label">鏄惁榄旂櫨鐩掞細</span><span class="tag-value">{{ customerInfo.hasMoBaiHe }}</span></div>
-          <div class="tag-item"><span class="tag-label">鏄惁缁勭綉锛?/span><span class="tag-value">{{ customerInfo.hasNetworking }}</span></div>
-          <div class="tag-item"><span class="tag-label">閫氫俊娑堣垂锛?/span><span class="tag-value">{{ customerInfo.communicationFee }}鍏?/span></div>
-          <div class="tag-item"><span class="tag-label">鏈堝潎璐﹀崟娑堣垂锛?/span><span class="tag-value">{{ customerInfo.avgMonthlyBill }}鍏?/span></div>
-          <div class="tag-item"><span class="tag-label">鏈堝潎娴侀噺浣跨敤锛?/span><span class="tag-value">{{ customerInfo.avgDataUsage }}</span></div>
-          <div class="tag-item"><span class="tag-label">鏈堝潎璇煶浣跨敤锛?/span><span class="tag-value">{{ customerInfo.avgVoiceUsage }}</span></div>
-          <div class="tag-item"><span class="tag-label">鏈堝潎娴侀噺楗卞拰搴︼細</span><span class="tag-value">{{ customerInfo.dataSaturation }}</span></div>
-          <div class="tag-item"><span class="tag-label">鏄惁闆嗗洟V缃戯細</span><span class="tag-value">{{ customerInfo.isGroupVNet }}</span></div>
-          <div class="tag-item"><span class="tag-label">鏄惁瀹跺涵V缃戯細</span><span class="tag-value">{{ customerInfo.isFamilyVNet }}</span></div>
-          <div class="tag-item"><span class="tag-label">鏈堝潎娴侀噺璐逛娇鐢細</span><span class="tag-value">{{ customerInfo.avgDataFee }}鍏?/span></div>
-          <div class="tag-item"><span class="tag-label">鏈堝潎濂楀寘璐逛娇鐢細</span><span class="tag-value">{{ customerInfo.avgPackageFee }}鍏?/span></div>
+          <div class="tag-item"><span class="tag-label">号码：</span><span class="tag-value">{{ customerInfo.phone }}</span></div>
+          <div class="tag-item"><span class="tag-label">全球通等级：</span><span class="tag-value" style="color:#e6a23c;font-weight:700;">{{ customerInfo.globalLevel }}</span></div>
+          <div class="tag-item"><span class="tag-label">入网时间：</span><span class="tag-value">{{ customerInfo.joinDate }}</span></div>
+          <div class="tag-item"><span class="tag-label">网龄：</span><span class="tag-value">{{ customerInfo.netAge }}</span></div>
+          <div class="tag-item"><span class="tag-label">套餐名称：</span><span class="tag-value">{{ customerInfo.packageName }}</span></div>
+          <div class="tag-item"><span class="tag-label">套餐费：</span><span class="tag-value">{{ customerInfo.packageFee }}元</span></div>
+          <div class="tag-item"><span class="tag-label">套内语音：</span><span class="tag-value">{{ customerInfo.voiceInPackage }}</span></div>
+          <div class="tag-item"><span class="tag-label">套内流量：</span><span class="tag-value">{{ customerInfo.dataInPackage }}</span></div>
+          <div class="tag-item"><span class="tag-label">套内语音使用：</span><span class="tag-value">{{ customerInfo.voiceUsed }}</span></div>
+          <div class="tag-item"><span class="tag-label">套内流量使用：</span><span class="tag-value">{{ customerInfo.dataUsed }}</span></div>
+          <div class="tag-item"><span class="tag-label">是否合户：</span><span class="tag-value">{{ customerInfo.isJointAccount }}</span></div>
+          <div class="tag-item"><span class="tag-label">宽带带宽：</span><span class="tag-value">{{ customerInfo.broadbandSpeed }}</span></div>
+          <div class="tag-item"><span class="tag-label">是否魔百盒：</span><span class="tag-value">{{ customerInfo.hasMoBaiHe }}</span></div>
+          <div class="tag-item"><span class="tag-label">是否组网：</span><span class="tag-value">{{ customerInfo.hasNetworking }}</span></div>
+          <div class="tag-item"><span class="tag-label">通信消费：</span><span class="tag-value">{{ customerInfo.communicationFee }}元</span></div>
+          <div class="tag-item"><span class="tag-label">月均账单消费：</span><span class="tag-value">{{ customerInfo.avgMonthlyBill }}元</span></div>
+          <div class="tag-item"><span class="tag-label">月均流量使用：</span><span class="tag-value">{{ customerInfo.avgDataUsage }}</span></div>
+          <div class="tag-item"><span class="tag-label">月均语音使用：</span><span class="tag-value">{{ customerInfo.avgVoiceUsage }}</span></div>
+          <div class="tag-item"><span class="tag-label">月均流量饱和度：</span><span class="tag-value">{{ customerInfo.dataSaturation }}</span></div>
+          <div class="tag-item"><span class="tag-label">是否集团V网：</span><span class="tag-value">{{ customerInfo.isGroupVNet }}</span></div>
+          <div class="tag-item"><span class="tag-label">是否家庭V网：</span><span class="tag-value">{{ customerInfo.isFamilyVNet }}</span></div>
+          <div class="tag-item"><span class="tag-label">月均流量费使用：</span><span class="tag-value">{{ customerInfo.avgDataFee }}元</span></div>
+          <div class="tag-item"><span class="tag-label">月均套包费使用：</span><span class="tag-value">{{ customerInfo.avgPackageFee }}元</span></div>
         </div>
       </div>
 
-      <!-- 鍙充晶锛氶浄杈惧浘 -->
+      <!-- 右侧：雷达图 -->
       <div class="card customer-right">
-        <div class="card-title">馃摗 瀹㈡埛鐢诲儚鍒嗘瀽</div>
+        <div class="card-title">📡 客户画像分析</div>
         <div ref="radarChart" class="radar-container"></div>
       </div>
     </div>
 
-    <!-- ===== 涓夈€佹帹鑽愭柟妗堝尯锛堟煡璇㈠悗鏄剧ず锛?===== -->
+    <!-- ===== 三、推荐方案区（查询后显示） ===== -->
     <div v-show="showResult" class="card">
       <div class="card-title">
-        馃幆 鎺ㄨ崘鏂规
-        <span style="font-size:12px;color:#909399;font-weight:400;margin-left:8px;">璇烽€夋嫨涓€涓柟妗?/span>
+        🎯 推荐方案
+        <span style="font-size:12px;color:#909399;font-weight:400;margin-left:8px;">请选择一个方案</span>
       </div>
 
       <div class="plan-table-wrapper">
         <table class="plan-table">
           <thead>
             <tr>
-              <th style="width:60px;">搴忓彿</th>
-              <th style="width:90px;">鏂规绫诲瀷</th>
-              <th>浜у搧鍚嶇О</th>
-              <th style="width:80px;">鍚堢害鏈?/th>
-              <th>浜у搧璧勬簮</th>
-              <th>浜у搧浼樺娍</th>
-              <th style="width:100px;">鎿嶄綔</th>
+              <th style="width:60px;">序号</th>
+              <th style="width:90px;">方案类型</th>
+              <th>产品名称</th>
+              <th style="width:80px;">合约期</th>
+              <th>产品资源</th>
+              <th>产品优势</th>
+              <th style="width:100px;">操作</th>
             </tr>
           </thead>
           <tbody>
@@ -560,7 +561,7 @@
                   class="select-btn"
                   @click.stop="handleSelectPlan(plan)"
                 >
-                  {{ selectedPlanId === plan.id ? '鉁?宸查€? : '閫?鎷? }}
+                  {{ selectedPlanId === plan.id ? '✓ 已选' : '选 择' }}
                 </el-button>
               </td>
             </tr>
@@ -569,11 +570,11 @@
       </div>
     </div>
 
-    <!-- ===== 鍥涖€佹帹鑽愯瘽鏈?+ 浜у搧鎻忚堪锛堟煡璇㈠悗鏄剧ず锛?===== -->
+    <!-- ===== 四、推荐话术 + 产品描述（查询后显示） ===== -->
     <div v-show="showResult" class="script-desc-section">
-      <!-- 宸︿晶锛氭帹鑽愯瘽鏈?-->
+      <!-- 左侧：推荐话术 -->
       <div class="card script-left">
-        <div class="card-title">馃挰 鎺ㄨ崘璇濇湳</div>
+        <div class="card-title">💬 推荐话术</div>
         <div class="script-box">
           <p>{{ currentScript.line1 }}</p>
           <p>{{ currentScript.line2 }}</p>
@@ -582,12 +583,12 @@
         </div>
       </div>
 
-      <!-- 鍙充晶锛氫骇鍝佹弿杩?-->
+      <!-- 右侧：产品描述 -->
       <div class="card desc-right">
-        <div class="card-title">馃摑 浜у搧鎻忚堪</div>
+        <div class="card-title">📝 产品描述</div>
         <div class="desc-content">
           <div class="product-name">{{ currentProduct.name }}</div>
-          <div class="product-code">浜у搧缂栫爜锛歿{ currentProduct.code }}</div>
+          <div class="product-code">产品编码：{{ currentProduct.code }}</div>
           <ol>
             <li v-for="(item, idx) in currentProduct.details" :key="idx">{{ item }}</li>
           </ol>
@@ -596,7 +597,7 @@
     </div>
   </div>
 
-  <!-- ===== 浜斻€佸簳閮ㄥ姙鐞嗗尯 ===== -->
+  <!-- ===== 五、底部办理区 ===== -->
   <div v-show="showResult" class="footer-bar">
     <el-button
       type="primary"
@@ -605,37 +606,40 @@
       @click="handleSubmit"
       :disabled="!selectedPlanId"
     >
-      鉁?绔?鍗?鍔?鐞?    </el-button>
+      ✨ 立 即 办 理
+    </el-button>
     <div style="margin-top:6px;font-size:12px;color:#c0c4cc;" v-if="!selectedPlanId">
-      璇峰厛鍦ㄦ帹鑽愭柟妗堜腑閫夋嫨涓€涓柟妗?    </div>
+      请先在推荐方案中选择一个方案
+    </div>
     <div style="margin-top:6px;font-size:12px;color:#909399;" v-else>
-      褰撳墠閫変腑锛?span style="color:#409EFF;font-weight:600;">{{ selectedPlanName }}</span>
+      当前选中：<span style="color:#409EFF;font-weight:600;">{{ selectedPlanName }}</span>
     </div>
   </div>
 
-  <!-- 鍔炵悊纭瀵硅瘽妗?-->
+  <!-- 办理确认对话框 -->
   <el-dialog
     v-model="confirmDialogVisible"
-    title="鍔炵悊纭"
+    title="办理确认"
     width="460px"
     :close-on-click-modal="false"
     center
   >
     <div style="text-align:center;padding:16px 0;font-size:16px;line-height:1.8;">
-      <p style="margin-bottom:12px;color:#606266;">纭鍔炵悊浠ヤ笅浜у搧锛?/p>
+      <p style="margin-bottom:12px;color:#606266;">确认办理以下产品？</p>
       <p style="font-size:20px;font-weight:700;color:#1a6fb5;">
         {{ submitTargetName }}
       </p>
       <p style="margin-top:8px;font-size:13px;color:#909399;">
-        鎵嬫満鍙风爜锛歿{ customerInfo.phone }}
+        手机号码：{{ customerInfo.phone }}
       </p>
     </div>
     <template #footer>
       <div style="display:flex;justify-content:center;gap:16px;">
         <el-button @click="confirmDialogVisible = false" size="large" style="width:120px;">
-          鍙?娑?        </el-button>
+          取 消
+        </el-button>
         <el-button type="primary" @click="handleConfirmSubmit" size="large" style="width:140px;" :loading="submitLoading">
-          纭鍔炵悊
+          确认办理
         </el-button>
       </div>
     </template>
@@ -647,7 +651,7 @@
 
   const app = createApp({
     setup() {
-      // ===== 鍝嶅簲寮忔暟鎹?=====
+      // ===== 响应式数据 =====
       const phoneNumber = ref('')
       const queryLoading = ref(false)
       const submitLoading = ref(false)
@@ -657,10 +661,10 @@
       const radarChart = ref(null)
       let chartInstance = null
 
-      const agentName = ref('寮犲皬鏄?)
+      const agentName = ref('张小明')
       const currentTime = ref('')
 
-      // 鏇存柊鏃堕棿
+      // 更新时间
       const updateTime = () => {
         const now = new Date()
         const pad = n => String(n).padStart(2, '0')
@@ -669,7 +673,7 @@
       updateTime()
       setInterval(updateTime, 1000)
 
-      // ===== 瀹㈡埛淇℃伅 =====
+      // ===== 客户信息 =====
       const customerInfo = reactive({
         phone: '',
         globalLevel: '',
@@ -696,106 +700,106 @@
         avgPackageFee: ''
       })
 
-      // ===== 闆疯揪鍥炬暟鎹?=====
+      // ===== 雷达图数据 =====
       const radarData = reactive({
         indicators: [
-          { name: '鎬绘祦閲忎娇鐢紙GB锛?, max: 100 },
-          { name: '濂楀唴娴侀噺浣跨敤锛圙B锛?, max: 100 },
-          { name: '濂楀唴娴侀噺楗卞拰搴︼紙%锛?, max: 100 },
-          { name: '濂楀唴璇煶楗卞拰搴︼紙%锛?, max: 100 },
-          { name: '鏄惁瀹藉甫', max: 100 }
+          { name: '总流量使用（GB）', max: 100 },
+          { name: '套内流量使用（GB）', max: 100 },
+          { name: '套内流量饱和度（%）', max: 100 },
+          { name: '套内语音饱和度（%）', max: 100 },
+          { name: '是否宽带', max: 100 }
         ],
         values: [90, 80, 95, 60, 100]
       })
 
-      // ===== 鏂规鍒楄〃 =====
+      // ===== 方案列表 =====
       const planList = ref([
         {
           id: 1,
-          label: '鏂规涓€',
-          type: '鐖卞濂楅',
-          productName: '鐖卞濂楅119鍏冩。 / 鐖卞濂楅149鍏冩。',
-          contractPeriod: '36涓湀',
-          resources: '50G銆?00鍒嗛挓銆?00M / 80G銆?00鍒嗛挓銆?000M',
-          advantages: '鍗曚环浣庛€佸甫瀹介珮 / 璇煶澶氥€佹祦閲忓銆佸甫瀹介珮',
+          label: '方案一',
+          type: '爱家套餐',
+          productName: '爱家套餐119元档 / 爱家套餐149元档',
+          contractPeriod: '36个月',
+          resources: '50G、200分钟、500M / 80G、600分钟、1000M',
+          advantages: '单价低、带宽高 / 语音多、流量多、带宽高',
           isRecommended: false
         },
         {
           id: 2,
-          label: '鏂规浜?,
-          type: '娴侀噺鍚堢害',
-          productName: '鎵胯娑堣垂浜祦閲忚豹绀硷紙50鍏冿級',
-          contractPeriod: '36涓湀',
+          label: '方案二',
+          type: '流量合约',
+          productName: '承诺消费享流量豪礼（50元）',
+          contractPeriod: '36个月',
           resources: '30GB',
-          advantages: '淇濆簳娑堣垂棰濆璧犻€?,
+          advantages: '保底消费额外赠送',
           isRecommended: false
         },
         {
           id: 3,
-          label: '鏂规涓?,
-          type: '娴侀噺鍖?,
-          productName: '30鍏?0G娴侀噺鍖?,
-          contractPeriod: '鏃?,
+          label: '方案三',
+          type: '流量包',
+          productName: '30元30G流量包',
+          contractPeriod: '无',
           resources: '30GB',
-          advantages: '璁㈣喘閫€璁㈣嚜鐢?,
+          advantages: '订购退订自由',
           isRecommended: false
         }
       ])
 
-      // ===== 涓嶅悓鏂规瀵瑰簲鐨勮瘽鏈拰浜у搧鎻忚堪 =====
+      // ===== 不同方案对应的话术和产品描述 =====
       const scriptDataMap = {
         1: {
-          line1: '鏌ョ湅鎮ㄨ处鎴蜂娇鐢ㄦ儏鍐碉紝鎮ㄥ钩鏃舵祦閲忓拰瀹藉甫浣跨敤闇€姹傝緝楂橈紝鐜版湁濂楅宸叉棤娉曟弧瓒虫棩甯镐娇鐢ㄩ渶姹傘€?,
-          line2: '缁欐偍鎺ㄨ崘銆愮埍瀹跺椁?19鍏冩。 / 鐖卞濂楅149鍏冩。銆戜骇鍝併€?,
-          line3: '鍔炵悊鍚庝韩鍙楀ぇ娴侀噺銆侀珮甯﹀銆佸璇煶锛屾弧瓒冲叏瀹堕€氫俊闇€姹傘€?,
-          line4: '鐩歌緝浜庡崟鐙璐悇椤规湇鍔℃洿鍔犱紭鎯狅紝鍏ㄥ鍏变韩鏇村姞鍒掔畻锛屾€т环姣旇緝楂橈紝鎺ㄨ崘鎮ㄥ姙鐞嗐€?
+          line1: '查看您账户使用情况，您平时流量和宽带使用需求较高，现有套餐已无法满足日常使用需求。',
+          line2: '给您推荐【爱家套餐119元档 / 爱家套餐149元档】产品。',
+          line3: '办理后享受大流量、高带宽、多语音，满足全家通信需求。',
+          line4: '相较于单独订购各项服务更加优惠，全家共享更加划算，性价比较高，推荐您办理。'
         },
         2: {
-          line1: '鏌ョ湅鎮ㄨ处鎴蜂娇鐢ㄦ儏鍐碉紝鎮ㄥ钩鏃舵祦閲忎娇鐢ㄦ瘮杈冪揣寮狅紝鐜版湁濂楅宸叉棤娉曟弧瓒虫棩甯镐娇鐢ㄩ渶姹傘€?,
-          line2: '缁欐偍鎺ㄨ崘銆愭壙璇烘秷璐逛韩娴侀噺璞ぜ锛?0鍏冿級銆戜骇鍝併€?,
-          line3: '鍔炵悊鍚庢壙璇哄搴斾繚搴曟秷璐癸紝姣忔湀棰濆璧犻€?0GB鍥藉唴閫氱敤娴侀噺銆?,
-          line4: '鐩歌緝浜庡崟鐙璐祦閲忓寘鏇村姞浼樻儬锛岄暱鏈熶娇鐢ㄦ洿鍔犲垝绠楋紝鎬т环姣旇緝楂橈紝鎺ㄨ崘鎮ㄥ姙鐞嗐€?
+          line1: '查看您账户使用情况，您平时流量使用比较紧张，现有套餐已无法满足日常使用需求。',
+          line2: '给您推荐【承诺消费享流量豪礼（50元）】产品。',
+          line3: '办理后承诺对应保底消费，每月额外赠送30GB国内通用流量。',
+          line4: '相较于单独订购流量包更加优惠，长期使用更加划算，性价比较高，推荐您办理。'
         },
         3: {
-          line1: '鏌ョ湅鎮ㄨ处鎴蜂娇鐢ㄦ儏鍐碉紝鎮ㄥ钩鏃舵祦閲忎娇鐢ㄥ伓灏旂揣寮狅紝闇€瑕佷竴涓伒娲荤殑娴侀噺琛ュ厖鏂规銆?,
-          line2: '缁欐偍鎺ㄨ崘銆?0鍏?0G娴侀噺鍖呫€戜骇鍝併€?,
-          line3: '鍔炵悊鍚庢瘡鏈堜韩30GB鍥藉唴閫氱敤娴侀噺锛岄殢璁㈤殢鐢紝鐏垫椿鏂逛究銆?,
-          line4: '璁㈣喘閫€璁㈣嚜鐢憋紝鏃犲悎绾︽潫缂氾紝閫傚悎鐭湡娴侀噺琛ュ厖闇€姹傦紝鎺ㄨ崘鎮ㄥ姙鐞嗐€?
+          line1: '查看您账户使用情况，您平时流量使用偶尔紧张，需要一个灵活的流量补充方案。',
+          line2: '给您推荐【30元30G流量包】产品。',
+          line3: '办理后每月享30GB国内通用流量，随订随用，灵活方便。',
+          line4: '订购退订自由，无合约束缚，适合短期流量补充需求，推荐您办理。'
         }
       }
 
       const productDataMap = {
         1: {
-        name: '鐖卞濂楅119鍏冩。 / 鐖卞濂楅149鍏冩。',
+        name: '爱家套餐119元档 / 爱家套餐149元档',
         code: '600000458521 / 600000458522',
         details: [
-          '鐖卞濂楅119鍏冩。锛氭瘡鏈?19鍏冿紝鍖呭惈50GB鍥藉唴閫氱敤娴侀噺銆?00鍒嗛挓鍥藉唴璇煶銆?00M瀹藉甫锛堜笉鍚腐婢冲彴鍦板尯锛夈€?,
-          '鐖卞濂楅149鍏冩。锛氭瘡鏈?49鍏冿紝鍖呭惈80GB鍥藉唴閫氱敤娴侀噺銆?00鍒嗛挓鍥藉唴璇煶銆?000M瀹藉甫锛堜笉鍚腐婢冲彴鍦板尯锛夈€?,
-          '璁㈣喘鎴愬姛绔嬪嵆鐢熸晥锛屼骇鍝佽嚜鐢熸晥涔嬫棩璧锋湁鏁堟湡36涓湀銆?,
-          '鍚堢害鏈熷唴鎸佺画璧犻€佹祦閲忓強瀹藉甫璧勬簮锛屾敮鎸佸搴垚鍛樺叡浜€?,
-          '鍒版湡鍚庢寜杩愯惀鍟嗚鍒欐墽琛岋紝鍙画绾︽垨鍙樻洿濂楅銆?
+          '爱家套餐119元档：每月119元，包含50GB国内通用流量、200分钟国内语音、500M宽带（不含港澳台地区）。',
+          '爱家套餐149元档：每月149元，包含80GB国内通用流量、600分钟国内语音、1000M宽带（不含港澳台地区）。',
+          '订购成功立即生效，产品自生效之日起有效期36个月。',
+          '合约期内持续赠送流量及宽带资源，支持家庭成员共享。',
+          '到期后按运营商规则执行，可续约或变更套餐。'
         ]
       },
         2: {
-          name: '鎵胯娑堣垂浜祦閲忚豹绀硷紙50鍏冿級',
+          name: '承诺消费享流量豪礼（50元）',
           code: '600000458523',
           details: [
-            '姣忔湀50鍏冿紝鍖呭惈30GB鍥藉唴閫氱敤娴侀噺锛堜笉鍚腐婢冲彴鍦板尯锛夈€?,
-            '璁㈣喘鎴愬姛绔嬪嵆鐢熸晥銆?,
-            '浜у搧鑷敓鏁堜箣鏃ヨ捣鏈夋晥鏈?6涓湀銆?,
-            '鍚堢害鏈熷唴鎸佺画璧犻€佹祦閲忚祫婧愩€?,
-            '鍒版湡鍚庢寜杩愯惀鍟嗚鍒欐墽琛屻€?
+            '每月50元，包含30GB国内通用流量（不含港澳台地区）。',
+            '订购成功立即生效。',
+            '产品自生效之日起有效期36个月。',
+            '合约期内持续赠送流量资源。',
+            '到期后按运营商规则执行。'
           ]
         },
         3: {
-          name: '30鍏?0G娴侀噺鍖?,
+          name: '30元30G流量包',
           code: '600000458530',
           details: [
-            '姣忔湀30鍏冿紝鍖呭惈30GB鍥藉唴閫氱敤娴侀噺锛堜笉鍚腐婢冲彴鍦板尯锛夈€?,
-            '璁㈣喘鎴愬姛绔嬪嵆鐢熸晥锛屾棤鍚堢害鏈熼檺鍒躲€?,
-            '鍙殢鏃堕€€璁紝娆℃湀鐢熸晥锛岀伒娲讳究鎹枫€?,
-            '娴侀噺褰撴湀鏈夋晥锛屼笉鍙粨杞嚦娆℃湀銆?,
-            '閫傚悎涓存椂鎬ф垨鍛ㄦ湡鎬ф祦閲忚ˉ鍏呴渶姹傘€?
+            '每月30元，包含30GB国内通用流量（不含港澳台地区）。',
+            '订购成功立即生效，无合约期限制。',
+            '可随时退订，次月生效，灵活便捷。',
+            '流量当月有效，不可结转至次月。',
+            '适合临时性或周期性流量补充需求。'
           ]
         }
       }
@@ -813,7 +817,7 @@
         details: []
       })
 
-      // ===== 璁＄畻灞炴€?=====
+      // ===== 计算属性 =====
       const selectedPlanName = computed(() => {
         const plan = planList.value.find(p => p.id === selectedPlanId.value)
         return plan ? plan.productName : ''
@@ -824,7 +828,7 @@
         return plan ? plan.productName : ''
       })
 
-      // ===== 鏇存柊璇濇湳鍜屼骇鍝佹弿杩?=====
+      // ===== 更新话术和产品描述 =====
       const updateScriptAndProduct = (planId) => {
         const script = scriptDataMap[planId]
         if (script) {
@@ -841,72 +845,75 @@
         }
       }
 
-      // ===== 鏌ヨ =====
+      // ===== 查询 =====
       const handleQuery = async () => {
-        // 鏍￠獙鎵嬫満鍙?        const phoneReg = /^1[3-9]\d{9}$/
+        // 校验手机号
+        const phoneReg = /^1[3-9]\d{9}$/
         if (!phoneReg.test(phoneNumber.value)) {
-          ElementPlus.ElMessage.warning('璇疯緭鍏ユ纭殑11浣嶆墜鏈哄彿鐮?)
+          ElementPlus.ElMessage.warning('请输入正确的11位手机号码')
           return
         }
 
         queryLoading.value = true
 
-        // 妯℃嫙鎺ュ彛璇锋眰
+        // 模拟接口请求
         await new Promise(resolve => setTimeout(resolve, 800))
 
-        // 濉厖瀹㈡埛淇℃伅
+        // 填充客户信息
         const maskedPhone = phoneNumber.value.substring(0, 3) + '****' + phoneNumber.value.substring(7)
         customerInfo.phone = maskedPhone
         customerInfo.globalLevel = 'V3'
         customerInfo.joinDate = '2018-03-15'
-        customerInfo.netAge = '7骞?
-        customerInfo.packageName = '5G鐣呬韩濂楅79鍏冩。'
+        customerInfo.netAge = '7年'
+        customerInfo.packageName = '5G畅享套餐79元档'
         customerInfo.packageFee = '79'
-        customerInfo.voiceInPackage = '300鍒嗛挓'
+        customerInfo.voiceInPackage = '300分钟'
         customerInfo.dataInPackage = '30GB'
-        customerInfo.voiceUsed = '180鍒嗛挓'
+        customerInfo.voiceUsed = '180分钟'
         customerInfo.dataUsed = '45GB'
-        customerInfo.isJointAccount = '鏄?
+        customerInfo.isJointAccount = '是'
         customerInfo.broadbandSpeed = '500M'
-        customerInfo.hasMoBaiHe = '鏄?
-        customerInfo.hasNetworking = '鏄?
+        customerInfo.hasMoBaiHe = '是'
+        customerInfo.hasNetworking = '是'
         customerInfo.communicationFee = '132'
         customerInfo.avgMonthlyBill = '128'
         customerInfo.avgDataUsage = '42GB'
-        customerInfo.avgVoiceUsage = '220鍒嗛挓'
+        customerInfo.avgVoiceUsage = '220分钟'
         customerInfo.dataSaturation = '150%'
-        customerInfo.isGroupVNet = '鍚?
-        customerInfo.isFamilyVNet = '鏄?
+        customerInfo.isGroupVNet = '否'
+        customerInfo.isFamilyVNet = '是'
         customerInfo.avgDataFee = '48'
         customerInfo.avgPackageFee = '20'
 
-        // 榛樿閫変腑AI鎺ㄨ崘鏂规锛堟柟妗堜簩锛?        selectedPlanId.value = 2
+        // 默认选中AI推荐方案（方案二）
+        selectedPlanId.value = 2
         updateScriptAndProduct(2)
 
         showResult.value = true
         queryLoading.value = false
 
-        // 娓叉煋闆疯揪鍥?        await nextTick()
+        // 渲染雷达图
+        await nextTick()
         renderRadarChart()
 
-        ElementPlus.ElMessage.success('鏌ヨ鎴愬姛')
+        ElementPlus.ElMessage.success('查询成功')
       }
 
-      // ===== 鏂规閫夋嫨 =====
+      // ===== 方案选择 =====
       const handleSelectPlan = (plan) => {
         selectedPlanId.value = plan.id
         updateScriptAndProduct(plan.id)
         ElementPlus.ElMessage({
-          message: `宸查€夋嫨锛?{plan.productName}`,
+          message: `已选择：${plan.productName}`,
           type: 'success',
           duration: 1500
         })
       }
 
-      // ===== 鍔炵悊 =====
+      // ===== 办理 =====
       const handleSubmit = () => {
         if (!selectedPlanId.value) {
-          ElementPlus.ElMessage.warning('璇峰厛閫夋嫨涓€涓帹鑽愭柟妗?)
+          ElementPlus.ElMessage.warning('请先选择一个推荐方案')
           return
         }
         confirmDialogVisible.value = true
@@ -915,20 +922,20 @@
       const handleConfirmSubmit = async () => {
         submitLoading.value = true
 
-        // 妯℃嫙鍔炵悊鎺ュ彛
+        // 模拟办理接口
         await new Promise(resolve => setTimeout(resolve, 1200))
 
         submitLoading.value = false
         confirmDialogVisible.value = false
 
         ElementPlus.ElMessage({
-          message: '馃帀 鍔炵悊鎴愬姛锛佷骇鍝佸凡鐢熸晥锛屾劅璋㈡偍鐨勫姙鐞嗐€?,
+          message: '🎉 办理成功！产品已生效，感谢您的办理。',
           type: 'success',
           duration: 3000,
           showClose: true
         })
 
-        // 鍒锋柊瀹㈡埛淇℃伅锛堟ā鎷燂級
+        // 刷新客户信息（模拟）
         await new Promise(resolve => setTimeout(resolve, 500))
         customerInfo.packageName = currentProduct.name
         customerInfo.dataSaturation = '70%'
@@ -937,13 +944,13 @@
         renderRadarChart()
       }
 
-      // ===== 閲嶇疆 =====
+      // ===== 重置 =====
       const handleReset = () => {
         phoneNumber.value = ''
-        ElementPlus.ElMessage.info('宸查噸缃?)
+        ElementPlus.ElMessage.info('已重置')
       }
 
-      // ===== 闆疯揪鍥炬覆鏌?=====
+      // ===== 雷达图渲染 =====
       const renderRadarChart = () => {
         if (!radarChart.value) return
 
@@ -964,12 +971,12 @@
               fontSize: 13
             },
             formatter: function(params) {
-              let result = `<strong style="color:#1a6fb5;">瀹㈡埛鐢诲儚鍒嗘瀽</strong><br/>`
+              let result = `<strong style="color:#1a6fb5;">客户画像分析</strong><br/>`
               if (params.value) {
                 const names = radarData.indicators.map(i => i.name)
                 params.value.forEach((v, i) => {
-                  const display = names[i] === '鏄惁瀹藉甫' ? (v >= 50 ? '鏄? : '鍚?) : v
-                  result += `${names[i]}锛?strong>${display}</strong><br/>`
+                  const display = names[i] === '是否宽带' ? (v >= 50 ? '是' : '否') : v
+                  result += `${names[i]}：<strong>${display}</strong><br/>`
                 })
               }
               return result
@@ -977,7 +984,7 @@
           },
           legend: {
             bottom: 10,
-            data: ['褰撳墠瀹㈡埛'],
+            data: ['当前客户'],
             textStyle: {
               color: '#606266',
               fontSize: 13
@@ -1016,12 +1023,12 @@
           },
           series: [
             {
-              name: '褰撳墠瀹㈡埛',
+              name: '当前客户',
               type: 'radar',
               data: [
                 {
                   value: radarData.values,
-                  name: '褰撳墠瀹㈡埛',
+                  name: '当前客户',
                   areaStyle: {
                     color: {
                       type: 'linear',
@@ -1051,45 +1058,49 @@
 
         chartInstance.setOption(option)
 
-        // 鍝嶅簲寮忚皟鏁?        window.addEventListener('resize', () => {
+        // 响应式调整
+        window.addEventListener('resize', () => {
           if (chartInstance) {
             chartInstance.resize()
           }
         })
       }
 
-      // ===== 鐢熷懡鍛ㄦ湡 =====
+      // ===== 生命周期 =====
       onMounted(() => {
-        // 鍒濆鍖栨暟鎹?        customerInfo.phone = '138****8888'
+        // 初始化数据
+        customerInfo.phone = '138****8888'
         customerInfo.globalLevel = 'V3'
         customerInfo.joinDate = '2018-03-15'
-        customerInfo.netAge = '7骞?
-        customerInfo.packageName = '5G鐣呬韩濂楅79鍏冩。'
+        customerInfo.netAge = '7年'
+        customerInfo.packageName = '5G畅享套餐79元档'
         customerInfo.packageFee = '79'
-        customerInfo.voiceInPackage = '300鍒嗛挓'
+        customerInfo.voiceInPackage = '300分钟'
         customerInfo.dataInPackage = '30GB'
-        customerInfo.voiceUsed = '180鍒嗛挓'
+        customerInfo.voiceUsed = '180分钟'
         customerInfo.dataUsed = '45GB'
-        customerInfo.isJointAccount = '鏄?
+        customerInfo.isJointAccount = '是'
         customerInfo.broadbandSpeed = '500M'
-        customerInfo.hasMoBaiHe = '鏄?
-        customerInfo.hasNetworking = '鏄?
+        customerInfo.hasMoBaiHe = '是'
+        customerInfo.hasNetworking = '是'
         customerInfo.communicationFee = '132'
         customerInfo.avgMonthlyBill = '128'
         customerInfo.avgDataUsage = '42GB'
-        customerInfo.avgVoiceUsage = '220鍒嗛挓'
+        customerInfo.avgVoiceUsage = '220分钟'
         customerInfo.dataSaturation = '150%'
-        customerInfo.isGroupVNet = '鍚?
-        customerInfo.isFamilyVNet = '鏄?
+        customerInfo.isGroupVNet = '否'
+        customerInfo.isFamilyVNet = '是'
         customerInfo.avgDataFee = '48'
         customerInfo.avgPackageFee = '20'
 
-        // 榛樿閫変腑AI鎺ㄨ崘鏂规锛堟柟妗堜簩锛?        selectedPlanId.value = 2
+        // 默认选中AI推荐方案（方案二）
+        selectedPlanId.value = 2
         updateScriptAndProduct(2)
 
         showResult.value = true
 
-        // 娓叉煋闆疯揪鍥?        nextTick(() => {
+        // 渲染雷达图
+        nextTick(() => {
           renderRadarChart()
         })
       })
@@ -1120,7 +1131,7 @@
     }
   })
 
-  // 娉ㄥ唽 Element Plus 鍥炬爣
+  // 注册 Element Plus 图标
   app.use(ElementPlus)
   app.mount('#app')
 </script>
