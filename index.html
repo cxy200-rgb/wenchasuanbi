@@ -475,11 +475,11 @@
             <span style="color:#909399;">📞</span>
           </template>
         </el-input>
-        <el-button type="primary" class="query-btn" @click="handleQuery" :loading="queryLoading" :icon="'Search'">
+        <el-button type="primary" class="query-btn" @click="handleQuery" :loading="queryLoading">
           查 询
         </el-button>
-        <el-button text style="color:#909399;margin-left:8px;" @click="handleReset">
-          重置
+        <el-button plain type="info" style="margin-left:8px;" @click="handleReset">
+          重 置
         </el-button>
       </div>
 
