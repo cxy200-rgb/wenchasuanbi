@@ -170,13 +170,12 @@
     .tag-group-title {
       grid-column: 1 / -1;
       font-size: 12px;
-      font-weight: 700;
+      font-weight: 600;
       color: #409EFF;
-      padding: 5px 0 3px 10px;
-      margin-top: 6px;
-      border-left: 3px solid #409EFF;
-      background: linear-gradient(90deg, #ecf5ff, #ffffff);
-      letter-spacing: 1px;
+      padding: 1px 0 1px 8px;
+      margin-top: 2px;
+      border-left: 2px solid #409EFF;
+      line-height: 1.4;
     }
 
     .tag-group-title:first-child {
@@ -202,8 +201,8 @@
     /* 标签网格 */
     .tag-grid {
       display: grid;
-      grid-template-columns: 1fr 1fr 1fr;
-      gap: 2px 16px;
+      grid-template-columns: 1fr 1fr 1fr 1fr;
+      gap: 3px 12px;
     }
 
     .tag-item {
@@ -218,7 +217,7 @@
     .tag-label {
       color: #909399;
       flex-shrink: 0;
-      min-width: 100px;
+      min-width: 90px;
     }
 
     .tag-value {
@@ -233,67 +232,89 @@
       min-height: 0;
     }
 
-    /* ===== 推荐方案表格 ===== */
-    .plan-table-wrapper {
-      overflow-x: auto;
+    /* ===== 现状 + 推荐方案 ===== */
+    .plan-compare {
+      display: flex;
+      align-items: stretch;
+      gap: 0;
     }
 
-    .plan-table {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: 14px;
+    .plan-side {
+      flex: 1;
+      padding: 16px 20px;
     }
 
-    .plan-table th {
-      background: #f5f7fa;
-      color: #606266;
+    .plan-current {
+      background: #fafbfc;
+      border-radius: 8px;
+      border: 1px solid #e4e7ed;
+    }
+
+    .plan-side-title {
+      font-size: 15px;
       font-weight: 700;
-      padding: 12px 14px;
-      text-align: center;
-      border-bottom: 2px solid #e4e7ed;
-      white-space: nowrap;
+      margin-bottom: 14px;
+      padding-bottom: 8px;
+      border-bottom: 2px solid #e8f4fd;
     }
 
-    .plan-table td {
-      padding: 12px 14px;
-      text-align: center;
-      border-bottom: 1px solid #ebeef5;
-      color: #303133;
-      transition: background 0.2s ease;
+    .plan-current .plan-side-title {
+      color: #606266;
     }
 
-    .plan-table tbody tr {
-      cursor: pointer;
-      transition: all 0.2s ease;
-    }
-
-    .plan-table tbody tr:hover {
+    .plan-recommend {
       background: #f0f7ff;
+      border-radius: 8px;
+      border: 1px solid #c6e2ff;
     }
 
-    .plan-table tbody tr.selected {
-      background: #ecf5ff;
-      border-left: 3px solid #409EFF;
+    .plan-recommend .plan-side-title {
+      color: #409EFF;
     }
 
-    .plan-table tbody tr.selected td {
-      color: #1a6fb5;
-      font-weight: 600;
+    .plan-divider {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 48px;
+      flex-shrink: 0;
     }
 
-    .plan-table .select-btn {
-      padding: 6px 20px;
-    }
-
-    .plan-table .ai-badge {
-      display: inline-block;
-      background: linear-gradient(135deg, #ff9500, #ff6b35);
+    .plan-arrow {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #409EFF, #66b1ff);
       color: #fff;
-      font-size: 11px;
-      padding: 2px 8px;
-      border-radius: 10px;
-      margin-left: 6px;
-      vertical-align: middle;
+      font-size: 18px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 2px 8px rgba(64,158,255,0.3);
+    }
+
+    .plan-info-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6px 16px;
+    }
+
+    .plan-info-item {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .plan-info-label {
+      font-size: 12px;
+      color: #909399;
+    }
+
+    .plan-info-value {
+      font-size: 14px;
+      color: #303133;
+      font-weight: 500;
     }
 
     /* ===== 推荐话术 + 产品描述 ===== */
@@ -558,56 +579,36 @@
       </div>
     </div>
 
-    <!-- ===== 三、推荐方案区（查询后显示） ===== -->
+    <!-- ===== 三、现状 + 推荐方案 ===== -->
     <div v-show="showResult" class="card">
-      <div class="card-title">
-        🎯 推荐方案
-        <span style="font-size:12px;color:#909399;font-weight:400;margin-left:8px;">请选择一个方案</span>
-      </div>
-
-      <div class="plan-table-wrapper">
-        <table class="plan-table">
-          <thead>
-            <tr>
-              <th style="width:60px;">序号</th>
-              <th style="width:90px;">方案类型</th>
-              <th>产品名称</th>
-              <th style="width:80px;">合约期</th>
-              <th>产品资源</th>
-              <th>产品优势</th>
-              <th style="width:100px;">操作</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr
-              v-for="plan in planList"
-              :key="plan.id"
-              :class="{ selected: selectedPlanId === plan.id }"
-              @click="handleSelectPlan(plan)"
-            >
-              <td>
-                {{ plan.label }}
-
-              </td>
-              <td>{{ plan.type }}</td>
-              <td style="text-align:left;padding-left:20px;">{{ plan.productName }}</td>
-              <td>{{ plan.contractPeriod }}</td>
-              <td style="text-align:left;padding-left:20px;">{{ plan.resources }}</td>
-              <td style="text-align:left;padding-left:20px;">{{ plan.advantages }}</td>
-              <td>
-                <el-button
-                  :type="selectedPlanId === plan.id ? 'primary' : 'default'"
-                  :plain="selectedPlanId !== plan.id"
-                  size="small"
-                  class="select-btn"
-                  @click.stop="handleSelectPlan(plan)"
-                >
-                  {{ selectedPlanId === plan.id ? '✓ 已选' : '选 择' }}
-                </el-button>
-              </td>
-            </tr>
-          </tbody>
-        </table>
+      <div class="card-title">🎯 推荐方案</div>
+      <div class="plan-compare">
+        <!-- 左侧：现状 -->
+        <div class="plan-side plan-current">
+          <div class="plan-side-title">📋 现状</div>
+          <div class="plan-info-grid">
+            <div class="plan-info-item"><span class="plan-info-label">套餐名称</span><span class="plan-info-value">{{ currentPlan.name }}</span></div>
+            <div class="plan-info-item"><span class="plan-info-label">套餐费</span><span class="plan-info-value">{{ currentPlan.fee }}元</span></div>
+            <div class="plan-info-item"><span class="plan-info-label">流量资源</span><span class="plan-info-value">{{ currentPlan.dataResource }}</span></div>
+            <div class="plan-info-item"><span class="plan-info-label">语音资源</span><span class="plan-info-value">{{ currentPlan.voiceResource }}</span></div>
+            <div class="plan-info-item"><span class="plan-info-label">赠送金额</span><span class="plan-info-value">{{ currentPlan.giftAmount }}元</span></div>
+            <div class="plan-info-item"><span class="plan-info-label">月总消费</span><span class="plan-info-value" style="color:#409EFF;font-weight:700;">{{ currentPlan.monthlyTotal }}元</span></div>
+          </div>
+        </div>
+        <!-- 分隔 -->
+        <div class="plan-divider">
+          <div class="plan-arrow">→</div>
+        </div>
+        <!-- 右侧：推荐方案 -->
+        <div class="plan-side plan-recommend">
+          <div class="plan-side-title">✨ 推荐方案</div>
+          <div class="plan-info-grid">
+            <div class="plan-info-item"><span class="plan-info-label">拍照价值</span><span class="plan-info-value">{{ recommendPlan.photoValue }}</span></div>
+            <div class="plan-info-item"><span class="plan-info-label">目标档位</span><span class="plan-info-value">{{ recommendPlan.targetTier }}</span></div>
+            <div class="plan-info-item"><span class="plan-info-label">策略类型</span><span class="plan-info-value">{{ recommendPlan.strategyType }}</span></div>
+            <div class="plan-info-item" style="grid-column:1/-1;"><span class="plan-info-label">产品描述</span><span class="plan-info-value">{{ recommendPlan.productDesc }}</span></div>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -641,12 +642,9 @@
             class="submit-btn"
             size="large"
             @click="handleSubmit"
-            :disabled="!selectedPlanId"
           >
             ✨ 立 即 办 理
           </el-button>
-          <div class="submit-hint" v-if="!selectedPlanId">请先在推荐方案中选择一个方案</div>
-          <div class="submit-hint" v-else>当前选中：<span style="color:#409EFF;font-weight:600;">{{ selectedPlanName }}</span></div>
         </div>
       </div>
     </div>
@@ -692,7 +690,7 @@
       const queryLoading = ref(false)
       const submitLoading = ref(false)
       const showResult = ref(true)
-      const selectedPlanId = ref(null)
+      const selectedPlanId = ref(1)
       const confirmDialogVisible = ref(false)
       const radarChart = ref(null)
       let chartInstance = null
@@ -748,6 +746,23 @@
         values: [42, 30, 100, 60, 100]
       })
 
+      // ===== 现状 & 推荐方案 =====
+      const currentPlan = reactive({
+        name: '5G畅享套餐39元档',
+        fee: '39',
+        dataResource: '30GB',
+        voiceResource: '300分钟',
+        giftAmount: '0',
+        monthlyTotal: '132'
+      })
+
+      const recommendPlan = reactive({
+        photoValue: '[39, 50)',
+        targetTier: '50',
+        strategyType: '主套+低消',
+        productDesc: '9元随心卡+流量豪礼50元（承诺使用49套餐享30G）'
+      })
+
       // ===== 方案列表 =====
       const planList = ref([
         {
@@ -785,10 +800,10 @@
       // ===== 不同方案对应的话术和产品描述 =====
       const scriptDataMap = {
         1: {
-          line1: '查看您账户使用情况，您平时流量和宽带使用需求较高，现有套餐已无法满足日常使用需求。',
-          line2: '给您推荐【爱家套餐119元档 / 爱家套餐149元档】产品。',
-          line3: '办理后享受大流量、高带宽、多语音，满足全家通信需求。',
-          line4: '相较于单独订购各项服务更加优惠，全家共享更加划算，性价比较高，推荐您办理。'
+          line1: '查看您账户使用情况，您当前使用5G畅享套餐39元档，月均消费132元，流量使用紧张。',
+          line2: '给您推荐【9元随心卡+流量豪礼50元】组合产品。',
+          line3: '办理后承诺使用49元套餐，即可每月享30GB国内通用流量，主套+低消组合更优惠。',
+          line4: '相较于单独订购流量包，组合方案更实惠，长期使用性价比较高，推荐您办理。'
         },
         2: {
           line1: '查看您账户使用情况，您平时流量使用比较紧张，现有套餐已无法满足日常使用需求。',
@@ -806,16 +821,16 @@
 
       const productDataMap = {
         1: {
-        name: '爱家套餐119元档 / 爱家套餐149元档',
-        code: '600000458521 / 600000458522',
-        details: [
-          '爱家套餐119元档：每月119元，包含50GB国内通用流量、200分钟国内语音、500M宽带（不含港澳台地区）。',
-          '爱家套餐149元档：每月149元，包含80GB国内通用流量、600分钟国内语音、1000M宽带（不含港澳台地区）。',
-          '订购成功立即生效，产品自生效之日起有效期36个月。',
-          '合约期内持续赠送流量及宽带资源，支持家庭成员共享。',
-          '到期后按运营商规则执行，可续约或变更套餐。'
-        ]
-      },
+          name: '9元随心卡 + 流量豪礼50元',
+          code: '600000458523',
+          details: [
+            '9元随心卡：月费9元，含来电显示等基础功能。',
+            '流量豪礼50元：每月50元，包含30GB国内通用流量（不含港澳台地区）。',
+            '承诺使用49元套餐即可享受该组合优惠，月总消费约99元。',
+            '订购成功立即生效，产品自生效之日起有效期36个月。',
+            '合约期内持续赠送流量资源，到期后按运营商规则执行。'
+          ]
+        },
         2: {
           name: '承诺消费享流量豪礼（50元）',
           code: '600000458523',
@@ -901,8 +916,8 @@
         customerInfo.globalLevel = '白金卡'
         customerInfo.joinDate = '2018-03-15'
         customerInfo.netAge = '7年'
-        customerInfo.packageName = '5G畅享套餐79元档'
-        customerInfo.packageFee = '79'
+        customerInfo.packageName = '5G畅享套餐39元档'
+        customerInfo.packageFee = '39'
         customerInfo.voiceInPackage = '300分钟'
         customerInfo.dataInPackage = '30GB'
         customerInfo.voiceUsed = '180分钟'
@@ -922,8 +937,8 @@
         customerInfo.avgPackageFee = '20'
 
         // 默认选中AI推荐方案（方案二）
-        selectedPlanId.value = 2
-        updateScriptAndProduct(2)
+        selectedPlanId.value = 1
+        updateScriptAndProduct(1)
 
         showResult.value = true
         queryLoading.value = false
@@ -1102,8 +1117,8 @@
         customerInfo.globalLevel = '白金卡'
         customerInfo.joinDate = '2018-03-15'
         customerInfo.netAge = '7年'
-        customerInfo.packageName = '5G畅享套餐79元档'
-        customerInfo.packageFee = '79'
+        customerInfo.packageName = '5G畅享套餐39元档'
+        customerInfo.packageFee = '39'
         customerInfo.voiceInPackage = '300分钟'
         customerInfo.dataInPackage = '30GB'
         customerInfo.voiceUsed = '180分钟'
@@ -1123,8 +1138,8 @@
         customerInfo.avgPackageFee = '20'
 
         // 默认选中AI推荐方案（方案二）
-        selectedPlanId.value = 2
-        updateScriptAndProduct(2)
+        selectedPlanId.value = 1
+        updateScriptAndProduct(1)
 
         showResult.value = true
 
@@ -1146,6 +1161,8 @@
         currentTime,
         customerInfo,
         radarData,
+        currentPlan,
+        recommendPlan,
         planList,
         currentScript,
         currentProduct,
