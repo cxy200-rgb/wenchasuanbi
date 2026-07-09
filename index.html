@@ -198,6 +198,10 @@
       border-left: 3px solid #e6a23c;
     }
 
+    .tag-row-end {
+      grid-column: 1 / -1;
+    }
+
     /* 标签网格 */
     .tag-grid {
       display: grid;
@@ -542,7 +546,7 @@
             <div class="tag-item"><span class="tag-label">套内流量使用：</span><span class="tag-value">{{ customerInfo.dataUsed }}</span></div>
             <div class="tag-item"><span class="tag-label">月均语音使用：</span><span class="tag-value">{{ customerInfo.avgVoiceUsage }}</span></div>
             <div class="tag-item"><span class="tag-label">月均流量使用：</span><span class="tag-value">{{ customerInfo.avgDataUsage }}</span></div>
-            <div class="tag-item"><span class="tag-label">月均流量饱和度：</span><span class="tag-value">{{ customerInfo.dataSaturation }}</span></div>
+            <div class="tag-item tag-row-end"><span class="tag-label">月均流量饱和度：</span><span class="tag-value">{{ customerInfo.dataSaturation }}</span></div>
             <div class="tag-item"><span class="tag-label">是否合户：</span><span class="tag-value">{{ customerInfo.isJointAccount }}</span></div>
             <div class="tag-item"><span class="tag-label">宽带带宽：</span><span class="tag-value">{{ customerInfo.broadbandSpeed }}</span></div>
             <div class="tag-item"><span class="tag-label">是否魔百盒：</span><span class="tag-value">{{ customerInfo.hasMoBaiHe }}</span></div>
@@ -550,7 +554,7 @@
             <div class="tag-item"><span class="tag-label">通信消费：</span><span class="tag-value">{{ customerInfo.communicationFee }}元</span></div>
             <div class="tag-item"><span class="tag-label">月均账单消费：</span><span class="tag-value">{{ customerInfo.avgMonthlyBill }}元</span></div>
             <div class="tag-item"><span class="tag-label">月均流量费使用：</span><span class="tag-value">{{ customerInfo.avgDataFee }}元</span></div>
-            <div class="tag-item"><span class="tag-label">月均套包费使用：</span><span class="tag-value">{{ customerInfo.avgPackageFee }}元</span></div>
+            <div class="tag-item tag-row-end"><span class="tag-label">月均套包费使用：</span><span class="tag-value">{{ customerInfo.avgPackageFee }}元</span></div>
             <div class="tag-item"><span class="tag-label">是否集团V网：</span><span class="tag-value">{{ customerInfo.isGroupVNet }}</span></div>
             <div class="tag-item"><span class="tag-label">是否家庭V网：</span><span class="tag-value">{{ customerInfo.isFamilyVNet }}</span></div>
           </div>
